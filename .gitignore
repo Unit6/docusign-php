@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+_notes
+vendor
+tmp/docusign
+docusign.env

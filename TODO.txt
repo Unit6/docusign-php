@@ -1,0 +1,98 @@
+
+- Routes:
+    - /accounts (POST)
+    - /accounts/provisioning (GET)
+    - /accounts/{accountId} (DELETE|GET)
+    - /accounts/{accountId}/billing_plan (GET|PUT)
+    - /accounts/{accountId}/billing_plan/purchased_envelopes (PUT)
+    - /accounts/{accountId}/brands (GET|POST|DELETE)
+    - /accounts/{accountId}/captive_recipients/signature (DELETE)
+    - /accounts/{accountId}/connect (POST|GET|PUT)
+    - /accounts/{accountId}/connect/envelopes/retry_queue (PUT)
+    - /accounts/{accountId}/connect/envelopes/{envelopeId}/retry_queue (PUT)
+    - /accounts/{accountId}/connect/failures (GET)
+    - /accounts/{accountId}/connect/failures/{failureId} (GET|DELETE)
+    - /accounts/{accountId}/connect/logs (GET|DELETE)
+    - /accounts/{accountId}/connect/logs/{logId} (GET|DELETE)
+    - /accounts/{accountId}/connect/{connectId} (GET|DELETE)
+    - /accounts/{accountId}/consumer_disclosure (GET)
+    - /accounts/{accountId}/custom_fields (GET)
+    - /accounts/{accountId}/envelopes (GET|POST)
+    - /accounts/{accountId}/envelopes/status (PUT) ?
+    - /accounts/{accountId}/envelopes/{envelopeId} (GET|PUT)
+    - /accounts/{accountId}/envelopes/{envelopeId}/audit_events (GET)
+    - /accounts/{accountId}/envelopes/{envelopeId}/custom_fields (GET|POST|PUT|DELETE)
+    - /accounts/{accountId}/envelopes/{envelopeId}/documents (GET|PUT|DELETE)
+    - /accounts/{accountId}/envelopes/{envelopeId}/documents/certificate (GET)
+    - /accounts/{accountId}/envelopes/{envelopeId}/documents/combined (GET)
+    - /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId} (GET|PUT)
+    - /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/fields (GET|POST|PUT|DELETE)
+    - /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/pages/{pageId} (DELETE)
+    - /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/pages/{pageId}/page_image (GET|PUT)
+    - /accounts/{accountId}/envelopes/{envelopeId}/notification (GET)
+    - /accounts/{accountId}/envelopes/{envelopeId}/recipients (GET|POST|PUT|DELETE)
+    - /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/initials_image (PUT)
+    - /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/signature (GET)
+    - /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/signature_image (PUT)
+    - /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/tabs (POST|GET|PUT|DELETE)
+    - /accounts/{accountId}/envelopes/{envelopeId}/templates (GET)
+    - /accounts/{accountId}/envelopes/{envelopeId}/views/correct (POST)
+    - /accounts/{accountId}/envelopes/{envelopeId}/views/recipient (POST)
+    - /accounts/{accountId}/envelopes/{envelopeId}/views/sender (POST)
+    - /accounts/{accountId}/folders (GET)
+    - /accounts/{accountId}/folders/{folderId} (GET|PUT)
+    - /accounts/{accountId}/groups (POST|GET|PUT)
+    - /accounts/{accountId}/groups/{groupId}/brands (GET|PUT|DELETE)
+    - /accounts/{accountId}/groups/{groupId}/users (GET|PUT|DELETE)
+    - /accounts/{accountId}/permission_profiles (GET)
+    - /accounts/{accountId}/recipient_names (GET)
+    - /accounts/{accountId}/search_folders/{search_folder} (GET)
+    - /accounts/{accountId}/settings (GET|PUT)
+    - /accounts/{accountId}/templates (GET|POST)
+    - /accounts/{accountId}/templates/{templateId} (GET)
+    - /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields (GET|POST|PUT|DELETE)
+    - /accounts/{accountId}/templates/{templateId}/groups (PUT|DELETE)
+    - /accounts/{accountId}/unsupported_file_types (GET)
+    - /accounts/{accountId}/users (GET|POST|DELETE)
+    - /accounts/{accountId}/users/{userId} (GET)
+    - /accounts/{accountId}/users/{userId}/custom_settings (GET|PUT|DELETE)
+    - /accounts/{accountId}/users/{userId}/profile (GET|PUT)
+    - /accounts/{accountId}/users/{userId}/profile/image (GET|PUT|DELETE)
+    - /accounts/{accountId}/users/{userId}/settings (GET|PUT)
+    - /accounts/{accountId}/users/{userId}/signatures (GET|POST)
+    - /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName} (GET|PUT|DELETE)
+    - /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}/initials_image (GET|PUT|DELETE)
+    - /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}/signature_image (GET|PUT|DELETE)
+    - /accounts/{accountId}/users/{userId}/social (PUT|GET|DELETE)
+    - /accounts/{accountId}/views/console (POST)
+    - /billing_plans (GET)
+    - /billing_plans/{planId} (GET)
+    - /login_information (GET)
+    - /login_information/password (PUT)
+    - /oauth2/revoke (POST)
+    - /oauth2/token (POST)
+
+- Complex Types:
+    - address
+    - addressInformation
+    - authenticationMethods
+    - billingAddress
+    - connectDebugLog
+    - creditCardInformation
+    - currencyPlanPrices
+    - customFields
+    - documents
+    - envelopeTemplateDefinition
+    - eventNotification
+    - forgottenPasswordInfo
+    - idCheckInformationInput
+    - initialUser
+    - notification (reminders, expirations)
+    - planFeatureSets
+    - planInformation
+    - recipientAttachment
+    - referralInformation
+    - seatDiscounts
+    - socialAccountInformation.
+    - usageHistory
+    - userDetails

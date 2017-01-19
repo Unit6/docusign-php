@@ -1,0 +1,232 @@
+DocuSign\Service\Documents
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/documents
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}/documents
+    - DELETE /accounts/{accountId}/envelopes/{envelopeId}/documents
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/documents/certificate
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/documents/combined
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/fields
+    - POST   /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/fields
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/fields
+    - DELETE /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/fields
+
+    - DELETE /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/pages/{pageId}
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/pages/{pageId}/page_image
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/pages/{pageId}/page_image
+
+DocuSign\Service\Envelopes
+    + GET    /accounts/{accountId}/envelopes
+    + POST   /accounts/{accountId}/envelopes
+
+    + PUT    /accounts/{accountId}/envelopes/status
+
+    + GET    /accounts/{accountId}/envelopes/{envelopeId}
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/audit_events
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/custom_fields
+    - POST   /accounts/{accountId}/envelopes/{envelopeId}/custom_fields
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}/custom_fields
+    - DELETE /accounts/{accountId}/envelopes/{envelopeId}/custom_fields
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/notification
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/templates
+
+    + GET    /accounts/{accountId}/search_folders/{search_folder}
+
+DocuSign\Service\Recipients
+    + GET    /accounts/{accountId}/envelopes/{envelopeId}/recipients
+    - POST   /accounts/{accountId}/envelopes/{envelopeId}/recipients
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}/recipients
+    - DELETE /accounts/{accountId}/envelopes/{envelopeId}/recipients
+
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/initials_image
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/signature
+
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/signature_image
+
+    - GET    /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/tabs
+    - POST   /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/tabs
+    - PUT    /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/tabs
+    - DELETE /accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/tabs
+
+DocuSign\Service\Connect
+    - GET    /accounts/{accountId}/connect
+    - POST   /accounts/{accountId}/connect
+    - PUT    /accounts/{accountId}/connect
+
+    - PUT    /accounts/{accountId}/connect/envelopes/retry_queue
+
+    - PUT    /accounts/{accountId}/connect/envelopes/{envelopeId}/retry_queue
+
+    - GET    /accounts/{accountId}/connect/failures
+
+    - GET    /accounts/{accountId}/connect/failures/{failureId}
+    - DELETE /accounts/{accountId}/connect/failures/{failureId}
+
+    - GET    /accounts/{accountId}/connect/logs
+    - DELETE /accounts/{accountId}/connect/logs
+
+    - GET    /accounts/{accountId}/connect/logs/{logId}
+    - DELETE /accounts/{accountId}/connect/logs/{logId}
+
+    - GET    /accounts/{accountId}/connect/{connectId}
+    - DELETE /accounts/{accountId}/connect/{connectId}
+
+DocuSign\Service\Views
+    + POST   /accounts/{accountId}/views/console
+
+    - POST   /accounts/{accountId}/envelopes/{envelopeId}/views/correct
+
+    + POST   /accounts/{accountId}/envelopes/{envelopeId}/views/recipient
+
+    + POST   /accounts/{accountId}/envelopes/{envelopeId}/views/sender
+
+DocuSign\Service\Users
+    - GET    /accounts/{accountId}/users
+    - POST   /accounts/{accountId}/users
+    - DELETE /accounts/{accountId}/users
+
+    - GET    /accounts/{accountId}/users/{userId}
+
+    - GET    /accounts/{accountId}/users/{userId}/custom_settings
+    - POST   /accounts/{accountId}/users/{userId}/custom_settings
+    - DELETE /accounts/{accountId}/users/{userId}/custom_settings
+
+    - GET    /accounts/{accountId}/users/{userId}/profile
+    - PUT    /accounts/{accountId}/users/{userId}/profile
+
+    - GET    /accounts/{accountId}/users/{userId}/profile/image
+    - POST   /accounts/{accountId}/users/{userId}/profile/image
+    - DELETE /accounts/{accountId}/users/{userId}/profile/image
+
+    - GET    /accounts/{accountId}/users/{userId}/settings
+    - PUT    /accounts/{accountId}/users/{userId}/settings
+
+    - GET    /accounts/{accountId}/users/{userId}/signatures
+    - POST   /accounts/{accountId}/users/{userId}/signatures
+
+    - GET    /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}
+    - POST   /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}
+    - DELETE /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}
+
+    - GET    /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}/initials_image
+    - PUT    /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}/initials_image
+    - DELETE /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}/initials_image
+
+    - GET    /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}/signature_image
+    - PUT    /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}/signature_image
+    - DELETE /accounts/{accountId}/users/{userId}/signatures/{signatureIdOrName}/signature_image
+
+    - GET    /accounts/{accountId}/users/{userId}/social
+    - PUT    /accounts/{accountId}/users/{userId}/social
+    - DELETE /accounts/{accountId}/users/{userId}/social
+
+DocuSign\Service\Templates
+    - GET    /accounts/{accountId}/templates
+    - POST   /accounts/{accountId}/templates
+
+    - GET    /accounts/{accountId}/templates/{templateId}
+
+    - GET    /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
+    - POST   /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
+    - PUT    /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
+    - DELETE /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
+
+    - PUT    /accounts/{accountId}/templates/{templateId}/groups
+    - DELETE /accounts/{accountId}/templates/{templateId}/groups
+
+DocuSign\Service\Authentication
+    + GET    /login_information
+
+    + PUT    /login_information/password
+
+    - POST   /oauth2/revoke
+
+    - POST   /oauth2/token
+
+DocuSign\Service\Accounts
+    - POST    /accounts
+
+    - GET     /accounts/{accountId}
+    - DELETE  /accounts/{accountId}
+
+    - GET     /accounts/{accountId}/billing_plan
+    - PUT     /accounts/{accountId}/billing_plan
+
+    - PUT     /accounts/{accountId}/billing_plan/purchased_envelopes
+
+    - GET    /accounts/{accountId}/brands
+    - POST   /accounts/{accountId}/brands
+    - DELETE /accounts/{accountId}/brands
+
+    - DELETE /accounts/{accountId}/captive_recipients/signature
+
+    - GET    /accounts/{accountId}/consumer_disclosure
+
+    - GET    /accounts/{accountId}/custom_fields
+
+    - GET    /accounts/{accountId}/folders
+
+    - GET    /accounts/{accountId}/folders/{folderId}
+    - PUT    /accounts/{accountId}/folders/{folderId}
+
+    - GET    /accounts/{accountId}/groups
+    - POST   /accounts/{accountId}/groups
+    - PUT    /accounts/{accountId}/groups
+
+    - GET    /accounts/{accountId}/groups/{groupId}/brands
+    - PUT    /accounts/{accountId}/groups/{groupId}/brands
+    - DELETE /accounts/{accountId}/groups/{groupId}/brands
+
+    - GET    /accounts/{accountId}/groups/{groupId}/users
+    - PUT    /accounts/{accountId}/groups/{groupId}/users
+    - DELETE /accounts/{accountId}/groups/{groupId}/users
+
+    - GET    /accounts/{accountId}/permission_profiles
+
+    - GET    /accounts/{accountId}/recipient_names
+
+    - GET    /accounts/{accountId}/settings
+    - PUT    /accounts/{accountId}/settings
+
+    - GET    /accounts/{accountId}/unsupported_file_types
+
+    - GET    /accounts/provisioning
+
+    - GET    /billing_plans
+
+    - GET    /billing_plans/{planId}
+
+Complex Types:
+    - address
+    - addressInformation
+    - authenticationMethods
+    - billingAddress
+    - connectDebugLog
+    - creditCardInformation
+    - currencyPlanPrices
+    - customFields
+    - documents
+    - envelopeTemplateDefinition
+    - eventNotification
+    - forgottenPasswordInfo
+    - idCheckInformationInput
+    - initialUser
+    - notification (reminders, expirations)
+    - planFeatureSets
+    - planInformation
+    - recipientAttachment
+    - referralInformation
+    - seatDiscounts
+    - socialAccountInformation.
+    - usageHistory
+    - userDetails
