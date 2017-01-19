@@ -87,5 +87,52 @@ class CredentialsTest extends PHPUnit_Framework_TestCase
         $credentials = new DocuSign\Credentials($config);
 
         $this->assertFalse($credentials->isEmpty());
+
+        return $credentials;
+    }
+
+    /**
+     * @depends testCredentialsAreNotEmpty
+     */
+    public function testCredentialsIntegratorKey(DocuSign\Credentials $credentials)
+    {
+        $expected = $this->config['integrator_key'];
+        $changed = 'foobar';
+
+        $this->assertEquals($expected, $credentials->getIntegratorKey());
+
+        $credentials->setIntegratorKey($changed);
+
+        $this->assertEquals($changed, $credentials->getIntegratorKey());
+    }
+
+    /**
+     * @depends testCredentialsAreNotEmpty
+     */
+    public function testCredentialsEmail(DocuSign\Credentials $credentials)
+    {
+        $expected = $this->config['email'];
+        $changed = 'foobar@example.com';
+
+        $this->assertEquals($expected, $credentials->getEmail());
+
+        $credentials->setEmail($changed);
+
+        $this->assertEquals($changed, $credentials->getEmail());
+    }
+
+    /**
+     * @depends testCredentialsAreNotEmpty
+     */
+    public function testCredentialsPassword(DocuSign\Credentials $credentials)
+    {
+        $expected = $this->config['password'];
+        $changed = 'foo.password.bar';
+
+        $this->assertEquals($expected, $credentials->getPassword());
+
+        $credentials->setPassword($changed);
+
+        $this->assertEquals($changed, $credentials->getPassword());
     }
 }

@@ -71,7 +71,7 @@ class Templates extends DocuSign\Service
      *
      * This retrieves the definition of the specified template.
      */
-    public function getTemplate()
+    public function getTemplate($templateId)
     {
         # GET /accounts/{accountId}/templates/{templateId}
     }
@@ -84,7 +84,7 @@ class Templates extends DocuSign\Service
      *
      * @param string $documentId
      */
-    public function getTemplateDocumentCustomFields($documentId)
+    public function getTemplateDocumentCustomFields($templateId, $documentId)
     {
         # GET /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
     }
@@ -143,7 +143,7 @@ class Templates extends DocuSign\Service
      *
      * @param string $groupId
      */
-    public function setTemplateGroup($groupId)
+    public function setTemplateGroup($templateId, $groupId)
     {
         # PUT /accounts/{accountId}/templates/{templateId}/groups
     }
@@ -153,7 +153,7 @@ class Templates extends DocuSign\Service
      *
      * This removes template sharing for a group.
      */
-    public function deleteTemplateGroup()
+    public function deleteTemplateGroup($templateId)
     {
         # DELETE /accounts/{accountId}/templates/{templateId}/groups
     }

@@ -15,7 +15,7 @@ namespace Unit6\DocuSign;
  *
  * @author Unit6 <team@unit6websites.com>
  */
-abstract class Resource implements ResourceInterface
+abstract class Resource #implements ResourceInterface
 {
     protected $id;
     protected $idField;

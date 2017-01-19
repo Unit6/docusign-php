@@ -48,7 +48,9 @@ class Model
             }
         }
 
-        throw new Exception\Model('Undefined method in Model class.');
+        $err = sprintf('Undefined method ("%s") in Model class.', $name);
+
+        throw new Exception\Model($err);
     }
 
     public function __set($name, $value)
@@ -75,16 +77,6 @@ class Model
         return $this->data[$name];
     }
 
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getData()
     {
         return $this->data;
@@ -103,6 +95,19 @@ class Model
         $parameters = $this->getParameters();
 
         return isset($parameters[$key]);
+    }
+
+    public function filterData(&$input, $whitelist)
+    {
+        $filtered = [];
+
+        foreach ($whitelist as $key) {
+            if (isset($input[$key]) && $input[$key] !== '') {
+                $filtered[$key] = $input[$key];
+            }
+        }
+
+        return $input = $filtered;
     }
 
     public function assignData($source)

@@ -15,44 +15,27 @@ namespace Unit6\DocuSign;
  *
  * @author Unit6 <team@unit6websites.com>
  */
-abstract class Service implements ServiceInterface
+abstract class Service #implements ServiceInterface
 {
-    protected $client;
-    protected $request;
-
     public function __construct()
     {
-        $this->client  = Client::getInstance();
-        $this->request = $this->client->getRequest();
+        //
     }
 
-    public function getEndpoint($uri)
+    public static function getClientHeaders()
     {
-        // NOTE: The first request will authenticate on the standard endpoint.
-        //       Once a baseUrl has been set, all subsequent requests should
-        //       use that server endpoint.
-        $baseUrl = $this->client->getBaseUrl();
+        $client = Client::getInstance();
+        $headers = $client->getHeaders();
 
-        if ( ! is_null($baseUrl)) {
-            $rootUrl = $baseUrl;
-        } else {
-            $rootUrl = sprintf(
-                'https://%s.docusign.net/restapi/v%d',
-                $this->client->getEnvironment(),
-                $this->client->getVersion()
-            );
-        }
-
-        return $rootUrl . '/' . $uri;;
+        return $headers;
     }
 
-    public function getClient()
+    public function getResource($uri)
     {
-        return $this->client;
-    }
+        $resourceUri = ltrim($uri, '/');
 
-    public function getRequest()
-    {
-        return $this->request;
+        $url = $this->getEndpoint($resourceUri);
+
+        return $this->request->get($url, $this->client->getHeaders());
     }
 }

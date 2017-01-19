@@ -28,52 +28,5 @@ interface RequestInterface
      *
      * @return array     $response Outcome of the request.
      */
-    public function execute($method = 'GET', $url, array $headers = array(), array $params = array(), $data = null);
-
-    /**
-     * Execute a GET request.
-     *
-     * @param string     $url      Endpoint
-     * @param array      $headers  Assign the request headers.
-     * @param array      $params   Additional parameters.
-     *
-     * @return array     $response Outcome of the request.
-     */
-    public function get($url, array $headers = array(), array $params = array());
-
-    /**
-     * Execute a POST request.
-     *
-     * @param string     $url      Endpoint
-     * @param array      $headers  Assign the request headers.
-     * @param array      $params   Additional parameters.
-     * @param array|null $data     Data payload to be sent.
-     *
-     * @return array     $response Outcome of the request.
-     */
-    public function post($url, array $headers = array(), array $params = array(), $data = null);
-
-    /**
-     * Execute a PUT request.
-     *
-     * @param string     $url      Endpoint
-     * @param array      $headers  Assign the request headers.
-     * @param array      $params   Additional parameters.
-     * @param array|null $data     Data payload to be sent.
-     *
-     * @return array     $response Outcome of the request.
-     */
-    public function put($url, array $headers = array(), array $params = array(), $data = null);
-
-    /**
-     * Execute a DELETE request.
-     *
-     * @param string     $url      Endpoint
-     * @param array      $headers  Assign the request headers.
-     * @param array      $params   Additional parameters.
-     * @param array|null $data     Data payload to be sent.
-     *
-     * @return array     $response Outcome of the request.
-     */
-    public function delete($url, array $headers = array(), array $params = array(), $data = null);
+    public static function execute($method = 'GET', $uri, array $options = array());
 }

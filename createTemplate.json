@@ -1,0 +1,83 @@
+{
+    "envelopeTemplateDefinition": {
+        "templateId": "String content",
+        "name": "String content",
+        "shared": "String content",
+        "password": "String content",
+        "description": "String content",
+        "lastModified": "String content",
+        "pageCount": "String content",
+        "folderName": "String content",
+        "folderId": "String content",
+        "owner": {
+            "userName": "String content",
+            "email": "String content",
+            "userId": "String content",
+            "userType": "String content",
+            "userStatus": "String content"
+        }
+    },
+    "accessibility": "string content",
+    "allowMarkup": "String content",
+    "allowReassign": "String content",
+    "allowRecipientRecursion": "String content",
+    "asynchronous": "String content",
+    "authoritativeCopy": "Stringcontent",
+    "autoNavigation": "Stringcontent",
+    "brandId": "Stringcontent",
+    "emailBlurb": "Stringcontent",
+    "emailSubject": "Stringcontent",
+    "enableWetSign": "Stringcontent",
+    "enforceSignerVisibility": "Stringcontent",
+    "envelopeIdStamping": "Stringcontent",
+    "messageLock": "stringcontent",
+    "recipientsLock": "Stringcontent",
+    "signingLocation": "Stringcontent",
+    "eventNotification": {
+        "customFields": {
+            "url": "Stringcontent",
+            "loggingEnabled": "Stringcontent",
+            "requireAcknowledgment": "Stringcontent",
+            "useSoapInterface": "Stringcontent",
+            "soapNameSpace": "http: //DocuSignConnectListener",
+            "includeCertificateWithSoap": "true",
+            "signMessageWithX509Cert": "Stringcontent",
+            "includeDocuments": "Stringcontent",
+            "includeEnvelopeVoidReason": "Stringcontent",
+            "includeTimeZone": "http: //DocuSignConnectListener",
+            "includeSenderAccountAsCustomField": "true",
+            "includeDocumentFields": "Stringcontent",
+            "includeCertificateOfCompletion": "Stringcontent",
+            "envelopeEvents": [
+                {
+                    "envelopeEventStatusCode": "sent"
+                },
+                {
+                    "envelopeEventStatusCode": "completed",
+                    "includeDocuments": "true"
+                }
+            ],
+            "recipientEvents": [
+                {
+                    "recipientEventStatusCode": "Sent"
+                },
+                {
+                    "recipientEventStatusCode": "completed",
+                    "includeDocuments": "true"
+                }
+            ]
+        },
+        "emailSettings": {
+            "replyEmailAddressOverride": "string",
+            "replyEmailNameOverride": "string",
+            "bccEmailAddresses": [
+                {
+                    "email": "string"
+                },
+                {
+                    "email": "string"
+                }
+            ]
+        }
+    }
+}

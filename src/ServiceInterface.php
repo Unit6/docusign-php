@@ -25,15 +25,6 @@ interface ServiceInterface
     public function __construct();
 
     /**
-     * Get the DocuSign Endpoint.
-     *
-     * @param string $uri API Endpoint Resource
-     *
-     * @return string
-     */
-    public function getEndpoint($uri);
-
-    /**
      * Get the DocuSign Client.
      *
      * @return DocuSign\Client

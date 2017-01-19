@@ -23,4 +23,34 @@ class Brand extends DocuSign\Model
     {
         $this->assignData($row);
     }
+
+    public function setId($id)
+    {
+        $this->setBrandId($id);
+    }
+
+    public function getId()
+    {
+        return $this->getBrandId();
+    }
+
+    public function setName($name)
+    {
+        $this->setBrandName($name);
+    }
+
+    public function getName()
+    {
+        $this->getBrandName();
+    }
+
+    public function setCompany($company)
+    {
+        $this->setBrandCompany($company);
+    }
+
+    public function getCompany()
+    {
+        $this->getBrandCompany();
+    }
 }

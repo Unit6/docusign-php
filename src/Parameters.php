@@ -17,7 +17,7 @@ namespace Unit6\DocuSign;
  */
 class Parameters
 {
-    public static $typeOptions = array(
+    public static $typeOptions = [
         'boolean',
         'integer',
         'float',
@@ -26,13 +26,47 @@ class Parameters
         'object',
         'object',
         'null'
-    );
+    ];
 
     // pg.
-    public static $recipientIntermediary = array();
+    public static $recipientIntermediary = [];
 
-    // pg.
-    public static $referralInformation = array();
+    // pg. 60
+    // A complex type that contains the social information.
+    public static $socialAccountInformation = [
+        // The users email address.
+        'email' => 'string',
+        // The social account provider (Facebook, Yahoo, etc.).
+        'provider' => 'string',
+        //
+        'socialId' => 'string',
+        // The full user name for the account.
+        'userName' => 'string'
+    ];
+
+    // pg. 60, 79
+    // A complex type that contains the following information
+    // for entering referral and discount information.
+    public static $referralInformation = [
+        'advertisementId' => 'string',
+        'enableSupport' => 'string',
+        'groupMemberId' => 'string',
+        'idType' => 'string',
+        'includedSeats' => 'string',
+        'industry' => 'string',
+        'planStartMonth' => 'string',
+        'promoCode' => 'string',
+        'publisherId' => 'string',
+        'referralCode' => 'string',
+        'referrerName' => 'string',
+        'shopperId' => 'string',
+        // Following reserved for DoucSign use only:
+        'saleDiscountPercent' => 'string',
+        'saleDiscountAmount' => 'string',
+        'saleDiscountFixedAmount' => 'string',
+        'saleDiscountPeriods' => 'string',
+        'saleDiscountSeatPriceOverride' => 'string',
+    ];
 
     // pg. 324-
     // Tab Types and Parameters
@@ -46,7 +80,7 @@ class Parameters
     // with a specific recipient and are only used by the recipient types
     // In Person Signers and Signers.
     //
-    public static $tab = array(
+    public static $tab = [
         // Specifies string searched for to place the tab in the document.
         'anchorString' => 'string',
         // This specifies tab location as XOffset position,
@@ -210,7 +244,7 @@ class Parameters
         //              Only one selection can be true.
         //  - text: The text shown in the dropdown list.
         //  - value: The value used when the selected.
-        'listItems' => array(),
+        'listItems' => [],
 
         //
         // radioGroupTabs
@@ -222,7 +256,7 @@ class Parameters
         'groupName' => 'string',
         // This sets the locations and status for radio buttons that are
         // grouped together.
-        'radios' => array(),
+        'radios' => [],
 
         //
         // textTabs
@@ -243,20 +277,20 @@ class Parameters
         // When true, sets this as a payment tab. Can only be used with Text,
         // Number, Formula or List tabs. The value of the tab must be a number.
         'isPaymentAmount' => 'boolean',
-    );
+    ];
 
     // pg. 54-60
-    public static $account = array(
+    public static $account = [
         // The account name for the new account.
         'accountName' => 'string',
         // The name/value pair information for account settings.
         // These determine the features available for the account.
-        'accountSettings' => array(),
+        'accountSettings' => [],
         // Note: If country is US (United States) then State codes
         // are validated for US States. Otherwise, State is treated
         // as a non-validated string and serves the purpose of entering
         // a state/province/region.
-        'addressInformation' => array(
+        'addressInformation' => [
             'address1' => 'string',
             'address2' => 'string',
             'city' => 'string',
@@ -265,124 +299,354 @@ class Parameters
             'phone' => 'string',
             'postalCode' => 'string',
             'state' => 'string'
-        ),
+        ],
         // The credit card used to pay for this account.
-        'creditCardInformation' => array(
+        'creditCardInformation' => [
             'cardNumber' => 'string',
             'cardType' => 'string',
             'expirationMonth' => 'string',
             'expirationYear' => 'string',
             'nameOnCard' => 'string'
-        ),
+        ],
         // The Distributor Code that identifies the billing plan groups
         // and plans for the new account.
         'distributorCode' => 'string',
         // The Distributor Password for the distributorCode.
         'distributorPassword' => 'string',
         // A complex type with the initial user information for the new account.
-        'initialUser' => array(), // Model\User
-        'planInformation' => array(
-            // This is the ISO currency code for the account.
-            'currencyCode' => 'string',
-            'planFeatureSets' => array(
-                array(
-                    'currencyFeatureSetPrices' => array(
-                        // This contains the currencyCode and currencySymbol
-                        // for the alternate currency values for envelopeFee,
-                        // fixedFee, seatFee that are configured for this plan
-                        // feature set.
-                        'currencyCode' => 'string',
-                        'currencySymbol' => 'string',
-                        'envelopeFee' => 'string',
-                        'fixedFee' => 'string',
-                        'seatFee' => 'string'
-                    ),
-                    // An incremental envelope cost for plans with envelope
-                    // overages (when isEnabled=true).
-                    'envelopeFee' => 'string',
-                    // A unique ID for the feature set.
-                    'featureSetId' => 'string',
-                    // A one-time fee associated with the plan
-                    // (when isEnabled=true).
-                    'fixedFee' => 'string',
-                    // Determines if the feature set is actively set as
-                    // part of the plan.
-                    'isActive' => 'string',
-                    // Determines if the feature set is actively enabled as
-                    // part of the plan.
-                    'isEnabled' => 'string',
-                    // The name of the feature set.
-                    'name' => 'string',
-                    // An incremental seat cost for seat-based plans
-                    // (when isEnabled=true).
-                    'seatFee' => 'string'
-                )
-            ),
-            // The plan ID for the account. It uniquely identifies
-            // a plan and is used to set plans in other functions.
-            'planId' => 'string'
-        ),
-        'referralInformation' => array(
-            'advertisementId' => 'string',
-            'enableSupport' => 'string',
-            'groupMemberId' => 'string',
-            'idType' => 'string',
-            'includedSeats' => 'string',
-            'industry' => 'string',
-            'planStartMonth' => 'string',
-            'promoCode' => 'string',
-            'publisherId' => 'string',
-            'referralCode' => 'string',
-            'referrerName' => 'string',
-            'saleDiscountPercent' => 'string',
-            'shopperId' => 'string'
-        ),
-        'socialAccountInformation.' => array(
-            'email' => 'string',
-            'provider' => 'string',
-            'socialId' => 'string',
-            'userName' => 'string'
-        ),
-    );
+        'initialUser' => [], // Model\User
+        // A complex type that sets the feature sets for the account.
+        'planInformation' => [], // Model\Plan,
+        // A complex type that contains the following information
+        // for entering referral and discount information.
+        'referralInformation' => [],
+        // A complex type that contains social accounts.
+        'socialAccountInformation' => []
+    ];
 
-    // pg. 56-60
-    public static $accountSettings = array(
-        //
+    // pg. 59
+    // pg. 79
+    public static $plan = [
+        // This is the ISO currency code for the account.
+        'currencyCode' => 'string',
+        // A complex type that sets the feature sets for the account.
+        'planFeatureSets' => [],
+        // The plan ID for the account. It uniquely identifies
+        // a plan and is used to set plans in other functions.
+        'planId' => 'string',
+        // Reserved for DocuSign use only.
+        'freeTrialDaysOverride' => 'string'
+    ];
+
+    // pg. 59
+    // pg. 79
+    public static $planFeature = [
+        'currencyFeatureSetPrices' => [
+            // This contains the currencyCode and currencySymbol
+            // for each alternate currency values for envelopeFee,
+            // fixedFee, seatFee that are configured for this plan
+            // feature set.
+            [
+                'currencyCode' => 'string',
+                'currencySymbol' => 'string',
+                'envelopeFee' => 'string',
+                'fixedFee' => 'string',
+                'seatFee' => 'string'
+            ]
+        ],
+        // An incremental envelope cost for plans with envelope
+        // overages (when isEnabled=true).
+        'envelopeFee' => 'string',
+        // A unique ID for the feature set.
+        'featureSetId' => 'string',
+        // A one-time fee associated with the plan
+        // (when isEnabled=true).
+        'fixedFee' => 'string',
+        // Determines if the feature set is actively set as
+        // part of the plan.
+        'isActive' => 'string',
+        // Determines if the feature set is actively enabled as
+        // part of the plan.
+        'isEnabled' => 'string',
+        // The name of the feature set.
+        'name' => 'string',
+        // An incremental seat cost for seat-based plans
+        // (when isEnabled=true).
+        'seatFee' => 'string'
+    ];
+
+    // pg. 60-66
+    public static $accountSettings = [
+        // When true, the account allows in process envelopes
+        // to be corrected. (Admin)
+        'allowEnvelopeCorrect' => 'boolean',
+        // When true, the account allows In Person Signing.
+        // Authorization Required: SysAdmin
+        'allowInPerson' => 'boolean',
+        // When true, the account can use Offline Signing and
+        // envelopes signed using offline signing on mobile devices
+        // are synchronized with this account. This option and the
+        // inSessionEnabled option must both be enabled (true) for
+        // a caller to use offline signing.
         // Authorization Required: Admin
-        '' => '',
-        //
+        'allowOfflineSigning' => 'boolean',
+        // When true, senders are allowed to use the DocuSign Express
+        // digital signatures.
         // Authorization Required: Admin
-        '' => '',
-        //
+        'allowExpressSignerCertificate' => 'boolean',
+        // When true, senders are allowed to use the OpenTrust
+        // digital signatures.
         // Authorization Required: Admin
-        '' => '',
-        //
+        'allowOpenTrustSignerCertificate' => 'boolean',
+        // When true, senders are allowed to use the SAFE BioPharma
+        // digital signatures.
         // Authorization Required: Admin
-        '' => '',
-        //
+        'allowSafeBioPharmaSignerCertificate' => 'boolean',
+        // When true, the account allows users to share custom tags (fields).
+        // Note: This setting is only shown when getting account settings.
+        // It cannot be modified.
         // Authorization Required: Admin
-        '' => '',
-        //
+        'allowSharedTabs' => 'boolean',
+        // When true, the account allows signers to reassign an
+        // envelope.
         // Authorization Required: Admin
-        '' => '',
-        //
+        'allowSignerReassign' => 'boolean',
+        // When true, envelope documents are included as a PDF file
+        // attachment for signing completed emails.
+        // Authorization Required: SysAdmin
+        'attachCompletedEnvelope' => 'boolean',
+        // The auto-navigation rule for the account.
         // Authorization Required: Admin
-        '' => '',
-        //
+        'autoNavRule' => [
+            'Off',
+            'RequiredFields',
+            'RequiredAndBlankFields',
+            'AllFields',
+            'PageThenRequiredFields',
+            'PageThenRequiredAndBlankFields',
+            'PageThenAllFields'
+        ],
+        // When true, account administrators can self-brand their sending
+        // console through the DocuSign Console.
+        // Authorization Required: SysAdmin
+        'canSelfBrandSend' => 'boolean',
+        // When true, account administrators can self-brand their signing
+        // console through the DocuSign Console.
+        // Authorization Required: SysAdmin
+        'canSelfBrandSign' => 'boolean',
+        // When true, signers cannot use the upload signature/initials
+        // image option when signing a document.
         // Authorization Required: Admin
-        '' => '',
-        //
+        'disableUploadSignature' => 'boolean',
+        // When true, the auto-navigation is enabled for the account.
+        // Authorization Required: SysAdmin or EnableAutoNavByDSAdmin is set
+        'enableAutoNav' => 'boolean',
+        // When true, the account allows bulk sending of envelopes.
         // Authorization Required: Admin
-        '' => ''
-    );
+        'enableBulkRecipient' => 'boolean',
+        // When true, this account can use the Calculated Fields feature.
+        // Authorization Required: Admin & AllowExpression is set
+        'enableCalculatedFields' => 'boolean',
+        // When true, PowerForm access is enabled for the account.
+        // Authorization Required: SysAdmin
+        'enableDSPro' => 'boolean',
+        // When true, senders for this account can choose to
+        // have the envelope ID stamped in the document
+        // margins.
+        // Authorization Required: SysAdmin or account has EnableEnvelopeStampingByDSAdmin set)
+        'enableEnvelopeStampingByAccountAdmin' => 'boolean',
+        // When true, Payment Processing is enabled for the account.
+        // Authorization Required: Admin & AllowPaymentProcessing is set
+        'enablePaymentProcessing' => 'boolean',
+        // When true, PowerForm access is enabled for the account.
+        // Authorization Required: SysAdmin
+        'enablePowerForm' => 'boolean',
+        // When true, the account can use the requireSignOnPaper option.
+        // Authorization Required: Admin
+        'enableRequireSignOnPaper' => 'boolean',
+        // When true, an account administrator can reserve web domain and users.
+        // Authorization Required: SysAdmin
+        'enableReservedDomain' => 'boolean',
+        // When true, this account can use the Agent Recipient Type.
+        // Authorization Required: SysAdmin
+        'enableSendToAgent' => 'boolean',
+        // When true, this account can use the Intermediary Recipient Type.
+        // Authorization Required: Admin & AllowSendToIntermediary is set
+        'enableSendToIntermediary' => 'boolean',
+        // When true, this account can use the Editor Recipient Type.
+        // Authorization Required: Admin
+        'enableSendToManage' => 'boolean',
+        // When true, the account can define the routing order of
+        // recipients for envelopes sent using the DocuSign API.
+        // Authorization Required: SysAdmin
+        'enableSequentialSigningAPI' => 'boolean',
+        // When true, the account can define the routing order of
+        // recipients for envelopes sent using the DocuSign console.
+        // Authorization Required: SysAdmin
+        'enableSequentialSigningUI' => 'boolean',
+        // When true, a user can request attachments from a signer.
+        // Authorization Required: Admin
+        'enableSignerAttachments' => 'boolean',
+        // When true, a user can allow signers to use the sign on paper option.
+        // Authorization Required: Admin
+        'enableSignOnPaper' => 'boolean',
+        // When true, a user can override the default account setting
+        // for the sign on paper option.
+        // Authorization Required: Admin
+        'enableSignOnPaperOverride' => 'boolean',
+        // When true, Transaction Point is enabled for this account.
+        // Authorization Required: SysAdmin
+        'enableTransactionPoint' => 'boolean',
+        // When true, this account can use electronic vaulting for documents.
+        // Authorization Required: SysAdmin
+        'enableVaulting' => 'boolean',
+        // Shows the envelope integration rule for the account.
+        // Authorization Required: SysAdmin
+        'envelopeIntegrationAllowed' => ['NotAllowed', 'Full', 'IntegrationSendOnly'],
+        // When true, envelope integration is enabled for the account.
+        // Authorization Required: Admin & EnvelopeIntegrationAllowed is set
+        'envelopeIntegrationEnabled' => 'boolean',
+        // When true, envelope integration is enabled for the account.
+        // Authorization Required: Admin & EnvelopeIntegrationAllowed is set
+        'envelopeIntegrationEnabled' => 'boolean',
+        // When true, envelopes sent by this account automatically
+        // have the envelope ID stamped in the margins, unless the
+        // sender selects not to have them stamped.
+        // Authorization Required: GET only
+        'envelopeStamplingDefaultValue' => 'boolean',
+        // Indicates when a user’s authentication expires.
+        // Variable uses the value in IDCheckExpireDays.
+        // Authorization Required: Admin
+        'iDCheckExpire' => ['Always', 'Never', 'Variable'],
+        // The number of days before a user’s authentication expires.
+        // This is only active if the IDCheckExpire value is Variable.
+        // Authorization Required: Admin
+        'iDCheckExpireDays' => 'integer',
+        // Indicates if authentication is required by envelope signers.
+        // Optional means the authentication is determined by the sender.
+        // Authorization Required: Admin
+        'iDCheckRequired' => ['Always', 'Never', 'Optional'],
+        // The default question used by the In Person signing host
+        // for an In Person signing session.
+        // Authorization Required: Admin
+        'inPersonIDCheckQuestion' => 'string',
+        // When true, the account can use In Session (embedded) and
+        // offline signing. This option and the allowOfflineSigning
+        // option must both be enabled (true) for a caller to use
+        // offline signing.
+        // Authorization Required: Admin
+        'inSessionEnabled' => 'boolean',
+        // Sets the amount of idle activity time, in minutes,
+        // before a mobile user is automatically logged off of
+        // the system. If the setting is 0, then DocuSign mobile
+        // application users are never automatically logged off
+        // the system. The minimum setting is 1 minute and the
+        // maximum setting is 120 minutes.
+        // Note: This setting only applies to the DocuSign for
+        // iOS v2.8.2 or later mobile app.
+        // Authorization Required: Admin
+        'mobileSessionTimeout' => 'string',
+        // When true, senders can select to allow the recipient
+        // to provide a phone number for the Phone Authentication process.
+        // Authorization Required: Admin
+        'phoneAuthRecipientMayProvidePhoneNumber' => 'boolean',
+        // The policy for adding a digital certificate to downloaded,
+        // printed and emailed documents.
+        // Authorization Required: Admin
+        'pkiSignDownloadedPDFDocs' => ['NoSign', 'NoSignAllowUserOverride', 'YesSign'],
+        // The RSA account name.
+        // Note: Modifying this value might inadvertently disrupt
+        // your ID Check capability. Ensure you have the correct
+        // value before changing this.
+        // Authorization Required: Admin
+        'rsaVeridAccountName' => 'string',
+        // The password used with the RSA account.
+        // Note: Modifying this value might inadvertently disrupt
+        // your ID Check capability. Ensure you have the correct
+        // value before changing this.
+        // Authorization Required: Admin
+        'rsaVeridPassword' => 'string',
+        // The RSA rule set used with the account.
+        // Note: Modifying this value might inadvertently disrupt
+        // your ID Check capability. Ensure you have the correct
+        // value before changing this.
+        // Authorization Required: Admin
+        'rsaVeridRuleset' => 'string',
+        // The user ID for the RSA account.
+        // Note: Modifying this value might inadvertently disrupt
+        // your ID Check capability. Ensure you have the correct
+        // value before changing this.
+        // Authorization Required: Admin
+        'rsaVeridUserId' => 'string',
+        // This sets the account setting for how self-signed
+        // documents are presented to the email recipients. Enumeration values are:
+        // Authorization Required: Admin
+        'selfSignedRecipientEmailDocument' => [
+            // With this setting a PDF of the completed
+            // document is attached to the email
+            'include_pdf',
+            // With this setting a secure link to the
+            // self-signed documents is included in the email.
+            'include_link'
+        ],
+        // When true the selfSignedRecipientEmailDocument
+        // userSetting can be set for an individual user.
+        // The userSetting will override the account setting.
+        // Authorization Required: Admin
+        'selfSignedRecipientEmailDocumentUserOverride' => 'boolean',
+        // The amount of idle activity time, in minutes, before
+        // a user is automatically logged out of the system.
+        // The minimum setting is 20 minutes and the maximum
+        // setting is 120 minutes.
+        // Authorization Required: Admin
+        'sessionTimeout' => 'integer',
+        // The date/time format applied to Date Signed fields for the account.
+        // Authorization Required: Admin
+        'signDateFormat' => 'string',
+        // When true, the Certificate of Completion is included
+        // in the envelope documents PDF when it is downloaded.
+        // Authorization Required: AccountAdmin & account is selected in AccountSigningSettings
+        'signerAttachCertificateToEnvelopePDF' => 'boolean',
+        // When true, the signer without a DocuSign account
+        // can create a DocuSign account after signing.
+        // Authorization Required: AccountAdmin & account is selected in AccountSigningSettings
+        'signerCanCreateAccount' => 'boolean',
+        // When true, signers can use the DocuSign mobile signing user interface.
+        // Authorization Required: AccountAdmin & account is selected in AccountSigningSettings
+        'signerCanSignOnMobile' => 'boolean',
+        // When true, an envelope complete email is sent to an
+        // In Session (embedded) or offline signer after DocuSign
+        // processes the envelope.
+        // Authorization Required: Admin
+        'signerInSessionUseEnvelopeCompleteEmail' => 'boolean',
+        // When true, senders can only send an envelope to
+        // a recipient that has a DocuSign account.
+        // Authorization Required: AccountAdmin & account is selected in AccountSigningSettings
+        'signerMustHaveAccount' => 'boolean',
+        // When true, an envelope signer must log in to the
+        // DocuSign console to sign an envelope.
+        // Authorization Required: AccountAdmin & account is selected in AccountSigningSettings
+        'signerMustLoginToSign' => 'boolean',
+        // When true, the initial value of all SecureFields
+        // is written to the document when sent.
+        // Authorization Required: AccountAdmin & account is selected in AccountSigningSettings
+        'signerShowSecureFieldInitialValues' => 'boolean',
+        // When true, the content of notification emails is
+        // determined at the account level.
+        // Authorization Required: AccountAdmin & account is selected in AccountSigningSettings
+        'useAccountLevelEmail' => 'boolean',
+        // When true, the account can use the DocuSign API.
+        // Authorization Required: SysAdmin
+        'usesAPI' => 'boolean'
+    ];
 
     // pg. 66-67
-    public static $billingPlan = array(
+    public static $billingPlan = [
         // Note: If country is US (United States) then State codes
         // are validated for US States. Otherwise, State is treated
         // as a non-validated string and serves the purpose of entering
         // a state/province/region.
-        'billingAddress' => array(
+        'billingAddress' => [
             'address1' => 'string',
             'address2' => 'string',
             'city' => 'string',
@@ -391,67 +655,28 @@ class Parameters
             'phone' => 'string',
             'postalCode' => 'string',
             'state' => 'string'
-        ),
+        ],
         // The credit card used to pay for this account.
-        'creditCardInformation' => array(
+        'creditCardInformation' => [
             'cardNumber' => 'string',
             'cardType' => 'string',
             'expirationMonth' => 'string',
             'expirationYear' => 'string',
             'nameOnCard' => 'string'
-        ),
+        ],
         // If true, the plan has support enabled.
         'enableSupport' => 'boolean',
         // The number of seats included in the plan.
         'includeSeats' => 'string',
-        'planInformation' => array(
-            // This is the ISO currency code for the account.
-            'currencyCode' => 'string',
-            'planFeatureSets' => array(
-                array(
-                    'currencyFeatureSetPrices' => array(
-                        // This contains the currencyCode and currencySymbol
-                        // for the alternate currency values for envelopeFee,
-                        // fixedFee, seatFee that are configured for this plan
-                        // feature set.
-                        'currencyCode' => 'string',
-                        'currencySymbol' => 'string',
-                        'envelopeFee' => 'string',
-                        'fixedFee' => 'string',
-                        'seatFee' => 'string'
-                    ),
-                    // An incremental envelope cost for plans with envelope
-                    // overages (when isEnabled=true).
-                    'envelopeFee' => 'string',
-                    // A unique ID for the feature set.
-                    'featureSetId' => 'string',
-                    // A one-time fee associated with the plan
-                    // (when isEnabled=true).
-                    'fixedFee' => 'string',
-                    // Determines if the feature set is actively set as
-                    // part of the plan.
-                    'isActive' => 'string',
-                    // Determines if the feature set is actively enabled as
-                    // part of the plan.
-                    'isEnabled' => 'string',
-                    // The name of the feature set.
-                    'name' => 'string',
-                    // An incremental seat cost for seat-based plans
-                    // (when isEnabled=true).
-                    'seatFee' => 'string'
-                )
-            ),
-            // The plan ID for the account. It uniquely identifies
-            // a plan and is used to set plans in other functions.
-            'planId' => 'string'
-        )
-    );
+        // A complex type that sets the feature sets for the account.
+        'planInformation' => [], // Model\Plan
+    ];
 
     // pg. 75-76
-    public static $connect = array();
+    public static $connect = [];
 
     // pg. 103-105
-    public static $document = array(
+    public static $document = [
         // The name of the document. This can be a maximum of
         // 100 characters. If the document is encrypted, this
         // is the unencrypted name of the document.
@@ -482,7 +707,7 @@ class Parameters
         // The array of DocumentField contains the elements:
         // Name – A string that can be a maximum of 50 characters.
         // Value – A string that can be a maximum of 200 characters.
-        'documentFields' => array(),
+        'documentFields' => [],
         // The total number of pages in the document.
         'pages' => 'string',
         // Optional element. File extension type of the document.
@@ -497,21 +722,21 @@ class Parameters
         // Optional element. Only used when uploading and editing
         // templates. Matchboxes are used to define areas in a
         // document for document matching when creating envelopes.
-        'matchboxes' => array(
+        'matchboxes' => [
             // The document page number that the matchbox should be on.
             'pageNumber' => 'integer',
             'xPosition' => 'integer',
             'yPosition' => 'integer',
             'width' => 'integer',
             'height' => 'integer',
-        ),
+        ],
         'remoteUrl' => 'string',
-    );
+    ];
 
 
     // pg. 99-103
     // pg. 126-132
-    public static $envelope = array(
+    public static $envelope = [
         // An optional element that can only be used if Document Accessibility
         // is enabled for the account. This sets the document reading zones
         // for screen reader applications.
@@ -567,13 +792,13 @@ class Parameters
         'messageLock' => 'string',
         // An optional complex element that specifies the notification
         // options for the envelope. It consists of:
-        'notification' => array(
+        'notification' => [
             // When true, the account default notification settings
             // are used for the envelope.
             'useAccountDefaults' => 'boolean',
             // A complex element that specifies reminder settings
             // for the envelope. It consists of:
-            'reminders' => array(
+            'reminders' => [
                 // When true a reminder message is sent to the recipient.
                 'reminderEnabled' => 'boolean',
                 // An interger that sets the number of days after the
@@ -583,10 +808,10 @@ class Parameters
                 // An interger that sets the interval, in days, between
                 // reminder emails.
                 'reminderFrequency' => 'integer',
-            ),
+            ],
             // A complex element that specifies the expiration settings
             // for the envelope. It consists of:
-            'expirations' => array(
+            'expirations' => [
                 // When true the envelope expires (is no longer available
                 // for signing) in the set number of days.
                 'expireEnabled' => 'boolean',
@@ -598,8 +823,8 @@ class Parameters
                 // email is sent to the recipient. If set to 0 (zero),
                 // no warning email is sent.
                 'expireWarn' => 'integer',
-            ),
-        ),
+            ],
+        ],
         // If true, prevents senders from changing, correcting,
         // or deleting the recipient information for the envelope.
         'recipientsLock' => 'string',
@@ -633,11 +858,11 @@ class Parameters
         // the envelope, help search for envelopes and track information.
         // See the section on getting Custom Fields for more information
         // about and descriptions of the custom fields.
-        'customFields' => array(),
+        'customFields' => [],
         // Complex element contains the details on the documents in the envelope.
-        'documents' => array(), // Collection of DocuSign\Model\Document
+        'documents' => [], // Collection of DocuSign\Model\Document
         // Specifies the envelope recipients.
-        'recipients' => array(), // Collection of DocuSign\Model\Recipient
+        'recipients' => [], // Collection of DocuSign\Model\Recipient
         // This optional complex element allows a message to be sent a specified
         // URL when the envelope or recipient changes status. It is similar to
         // DocuSign Connect. For example, if an envelope changes from "Sent"
@@ -648,7 +873,7 @@ class Parameters
         // only applies to the envelope (treating the envelope as the sender).
         // This is different from envelopes created through the console user
         // interface, where the user is treated as the sender.
-        'eventNotification' => array(
+        'eventNotification' => [
             // The endpoint where envelope updates are sent. This will
             // accept XML unless “useSoapInterface” is set to true.
             'url' => 'string',
@@ -696,15 +921,15 @@ class Parameters
             //  - envelopeEventStatus: The envelope status, this can
             //          be Sent, Delivered, Signed, Completed, Declined,
             //          or Voided.
-            'envelopeEvents' => array(),
+            'envelopeEvents' => [],
             // The list of recipient event statuses that will trigger
             // Connect to send updates to the url. It can be a two-part
             // list with:
             //  - recipientEventStatus: The recipient status, this can
             //          be AuthenticationFailed, AutoResponded, Completed,
             //          Declined, Delivered or Sent.
-            'recipientEvents' => array(),
-        ),
+            'recipientEvents' => [],
+        ],
         // This optional complex element allows sender to override some
         // envelope email setting information. This can be used to override
         // the Reply To email address and name associated with the envelope
@@ -716,7 +941,7 @@ class Parameters
         // IMPORTANT: The emailSettings information is not returned in the
         // GET for envelope status. Use GET /email_settings to return
         // information about the emailSettings.
-        'emailSettings' => array(
+        'emailSettings' => [
             // The Reply To email used for the envelope. DocuSign will verify
             // a correct email format is used, but does not verify that the email
             // is active. This can be a maximum of 100 characters.
@@ -739,12 +964,12 @@ class Parameters
             // using the BCC Email Override to send a BCC email to
             // 'salesarchive@mycompany.com', then a copy of the envelope is only
             // sent to the 'salesarchive@mycompany.com' email address.
-            'bccEmailAddresses' => array(),
-        ),
-    );
+            'bccEmailAddresses' => [],
+        ],
+    ];
 
     // pg. 166-167
-    public static $view = array(
+    public static $view = [
         // A sender created value that shows the recipient is embedded
         // (captive). This can be a maximum of 100 characters.
         'clientUserId' => 'string',
@@ -780,11 +1005,11 @@ class Parameters
         // Note: You can use either email and userName  or userId to
         // identify the recipient.
         'userName' => 'string',
-    );
+    ];
 
     // pg. 177
-    public static $group = array(
-        // The group ID number.
+    public static $group = [
+        // The DocuSign group ID for the group (required).
         'groupId' => 'string',
         // The name for the group.
         'groupName' => 'string',
@@ -794,23 +1019,25 @@ class Parameters
         // is associated with. See Get a List of Permission Profiles
         // for information on retrieving a list of IDs
         'permissionProfileId' => 'string',
-    );
+    ];
 
     // pg. 179-180
-    public static $brand = array(
+    public static $brand = [
         // The brandId of the brand profile being added to the group.
         'brandId' => 'string',
         // The brand name associated with the brand profile.
         'brandName' => 'string',
         // The brand company associated with the brand profile.
         'brandCompany' => 'string'
-    );
+    ];
 
-    // pg. 194-198
-    public static $template = array();
+    // pg. 264-270
+    public static $template = [
+        'accessibility' => 'string',
+    ];
 
     // pg. 213-216
-    public static $user = array(
+    public static $user = [
         // The activation code the new user must enter
         // when activating their account.
         'activationAccessCode' => 'string',
@@ -824,7 +1051,7 @@ class Parameters
         'firstName' => 'string',
         // A complex element that has up to four Question/Answer pairs
         // for forgotten password information.
-        'forgottenPasswordInfo' => array(
+        'forgottenPasswordInfo' => [
             'forgottenPasswordAnswer1' => 'string',
             'forgottenPasswordAnswer2' => 'string',
             'forgottenPasswordAnswer3' => 'string',
@@ -833,20 +1060,9 @@ class Parameters
             'forgottenPasswordQuestion2' => 'string',
             'forgottenPasswordQuestion3' => 'string',
             'forgottenPasswordQuestion4' => 'string',
-        ),
+        ],
         // A list of the group information for groups to add the user to.
-        'groupList' => array(
-            array(
-                // The DocuSign group ID for the group (required).
-                'groupId' => 'string',
-                // The name of the group.
-                'groupName' => 'string',
-                // The ID of the permission profile associated with the group.
-                'permissionProfileId' => 'string',
-                // The group type.
-                'groupType' => 'string',
-            )
-        ),
+        'groupList' => [],
         // The user's last name. This can be a maximum of 50 characters.
         'lastName' => 'string',
         // The user's middle name This can be a maximum of 50 characters.
@@ -868,13 +1084,20 @@ class Parameters
         // The name/value pair information for user settings. These determine
         // the actions that a user can take in the account. The userSettings
         // are listed and described below.
-        'userSettings' => array(
-            'name' => 'string',
-            'value' => 'string',
-        ),
-    );
+        'userSettings' => [],
+        // For user related requests.
+        'userId' => 'string',
+        'userType' => 'string',
+        'userStatus' => 'string',
+        'uri' => 'string',
+        'createdDateTime' => 'string',
+    ];
 
-    public static $userSettings = array(
+    // pg. 301-303
+    public static $userSettings = [
+        // When true, this user can use the bulk send functionality.
+        // Authorization Required: Admin
+        'allowBulkRecipients' => 'boolean',
         // When true, this provides the sender with the option to set
         // the language used in the standard email format for a
         // recipient when creating an envelope.
@@ -889,19 +1112,22 @@ class Parameters
         // Authorization Required: Admin
         'apiAccountWideAccess' => 'boolean',
         // This element sets the address book usage and management
-        // rights for the user. Enumeration values are:
-        // None, UseOnlyShared, UsePrivateAndShared, Share.
+        // rights for the user.
         // Authorization Required: Admin
-        'canEditSharedAddressBook' => 'string',
+        'canEditSharedAddressBook' => [
+            'None',
+            'UseOnlyShared',
+            'UsePrivateAndShared',
+            'Share'
+        ],
         // When true, this user can manage account settings, manage
         // user settings, add users, and remove users.
         // Authorization Required: Admin & not setting for self
         'canManageAccount' => 'boolean',
         // This element sets the template usage and management rights
-        // for the user. Enumeration values are:
-        // None, Use, Create, Share.
+        // for the user.
         // Authorization Required: Admin & not setting for self
-        'canManageTemplates' => 'string',
+        'canManageTemplates' =>  ['None', 'Use', 'Create', 'Share'],
         // Only needed if Integrator Key is not used. When true, this
         // user can send and manage envelopes using the DocuSign API.
         // Authorization Required: Admin & Account:UsesAPI is set
@@ -938,6 +1164,24 @@ class Parameters
         // When true, this user can use electronic vaulting for documents.
         // Authorization Required: Admin
         'enableVaulting' => 'boolean',
+        // This sets the default language for the user. The supported
+        // languages, with the language value shown in parenthesis are:
+        // Authorization Required: Admin
+        'locale' => [
+            'zh_CN',    // Chinese Simplified
+            'zh_TW',    // Chinese Traditional
+            'nl',       // Dutch
+            'en',       // English US
+            'fr',       // French
+            'de',       // German
+            'it',       // Italian
+            'ja',       // Japanese
+            'ko',       // Korean
+            'pt',       // Portuguese
+            'pt_BR',    // Portuguese (Brazil)
+            'ru',       // Russian
+            'es',       // Spanish
+        ],
         // When true, this user can create, manage and download the
         // PowerForms documents.
         // Authorization Required: Admin
@@ -945,15 +1189,27 @@ class Parameters
         // When true, this user can view and download PowerForms documents
         // Authorization Required: Admin
         'powerFormUser' => 'boolean',
-        // This element sets the electronic vaulting mode for the user.
-        // Enumeration values are:
-        // None, eStored and electronicOriginal.
+        // This sets the user setting for how self-signed documents
+        // are presented to the email recipients. This will
+        // override the account setting. This can only be changed
+        // if the selfSignedRecipientEmail DocumentUserOverride
+        // accountSetting is true.
         // Authorization Required: Admin
-        'vaultingMode' => 'string',
-    );
+        'selfSignedRecipientEmailDocument' => [
+            // With this setting a PDF of the completed document
+            // is attached to the email
+            'include_pdf',
+            // With this setting a secure link to the self-signed
+            // documents is included in the email.
+            'include_link'
+        ],
+        // This element sets the electronic vaulting mode for the user.
+        // Authorization Required: Admin
+        'vaultingMode' => ['None', 'eStored', 'electronicOriginal'],
+    ];
 
     // pg. 237
-    public static $signature = array(
+    public static $signature = [
         // The font type for the signature, if the signature
         // is not drawn. It must be one of the supported font types.
         'signtaureFont' => 'string',
@@ -961,10 +1217,10 @@ class Parameters
         'signatureInitials' => 'string',
         // The signature's name in the system.
         'signatureName' => 'string',
-    );
+    ];
 
     // pg. 228-230
-    public static $profile = array();
+    public static $profile = [];
 
     // Recipient Types
     // This section has the parameter information for the different
@@ -1022,7 +1278,7 @@ class Parameters
     // - Signers Recipient Type (pg. 313-323):
     //      Use this action if your recipient must sign, initial, date or add
     //      data to form fields on the documents in the envelope.
-    public static $recipient = array(
+    public static $recipient = [
         // Email of the recipient. Notification will be sent to
         // this email id. This can be a maximum of 100 characters.
         'email' => 'string',
@@ -1045,17 +1301,17 @@ class Parameters
         // custom data about the recipient. This information is returned
         // in the envelope status but otherwise not used by DocuSign.
         // Each customField string can be a maximum of 100 characters.
-        'customFields' => array(),
+        'customFields' => [],
         // An optional complex type that has information for setting the
         // language for the recipient’s email information.
         // IMPORTANT: If this is enabled for one recipient, it overrides
         // the Envelope Subject and EmailBlurb. Also, you must enable
         // emailNotification for all recipients.
-        'emailNotification' => array(
+        'emailNotification' => [
             'emailBody' => 'string',
             'emailSubject' => 'string',
             'supportedLanguage' => 'string',
-        ),
+        ],
         // Specifies the documents that are not visibile to this recipient.
         // Document Visibility must be enabled for the account to use this.
         'excludeDocuments' => 'string',
@@ -1078,23 +1334,23 @@ class Parameters
         // recipient ID check. It can include the following information.
         // addressInformationInput: Used to set recipient address information
         // and consists of:
-        'idCheckInformationInput' => array(
-            'addressInformationInput' => array(
+        'idCheckInformationInput' => [
+            'addressInformationInput' => [
                 // consists of six elements, with stree2 and zipPlus4 being optional.
                 // The elements are: street1, street2, city, state, zip, zipPlus4.
                 // The maximum number of characters in each element are:
                 // street1/street2 = 150 characters, city = 50 characters,
                 // state = 2 characters, and zip/zipPlus4 = 20 characters.
-                'addressInformation' => array(),
+                'addressInformation' => [],
                 // Specifies the display level for the recipient. Values are:
                 // ReadOnly, Editable, or DoNotDisplay
                 'displayLevelCode' => 'string',
                 // A Boolean element that specifies if the information needs
                 // to be returned in the response.
                 'receiveInResponse' => 'boolean',
-            ),
+            ],
             // Used to set recipient date of birth information and consists of
-            'dobInformationInput' => array(
+            'dobInformationInput' => [
                 // Specifies the recipient’s date, month and year of birth.
                 'dateOfBirth' => 'string',
                 // Specifies the display level for the recipient. Values are:
@@ -1103,10 +1359,10 @@ class Parameters
                 // A Boolean element that specifies if the information needs
                 // to be returned in the response.
                 'receiveInResponse' => 'boolean',
-            ),
+            ],
             // Used to set the last four digits of the recipient's SSN
             // information and consists of
-            'ssn4InformationInput' => array(
+            'ssn4InformationInput' => [
                 // Specifies the last four digits of the recipient's SSN.
                 'ssn4' => 'string',
                 // Specifies the display level for the recipient. Values are:
@@ -1115,11 +1371,11 @@ class Parameters
                 // A Boolean element that specifies if the information needs
                 // to be returned in the response.
                 'receiveInResponse' => 'boolean',
-            ),
+            ],
             // Used to set the recipient's SSN information. Note that
             // the ssn9 information can never be returned in the response.
             // The ssn9 input consists of:
-            'ssn9InformationInput' => array(
+            'ssn9InformationInput' => [
                 // Specifies the last four digits of the recipient's SSN.
                 'ssn9' => 'string',
                 // Specifies the display level for the recipient. Values are:
@@ -1129,8 +1385,8 @@ class Parameters
                 // A Boolean element that specifies if the information needs
                 // to be returned in the response.
                 'receiveInResponse' => 'boolean',
-            ),
-        ),
+            ],
+        ],
         // Optional element. If true and the recipient creates a DocuSign
         // account after signing, the Manage Account Email Notification
         // settings are used as the default settings for the recipient's account.
@@ -1141,7 +1397,7 @@ class Parameters
         // signing screen. This can be a maximum of 1000 characters.
         'note' => 'string',
         // Recipient Phone Authentication
-        'phoneAuthentication' => array(
+        'phoneAuthentication' => [
             // If true then recipient can use whatever phone number they want.
             'RecipMayProvideNumber' => 'boolean',
             // A list of phone numbers the recipient may use.
@@ -1150,11 +1406,11 @@ class Parameters
             'RecordVoicePrint' => '',
             // Reserved.
             'ValidateRecipProvideNumber' => '',
-        ),
+        ],
         // It would be possible to send attachments with recipients. This
         // complex element contains data in base64Binary. It also contains
         // label and type for the attachment.
-        'recipientAttachment' => array(),
+        'recipientAttachment' => [],
         // Unique for the recipient. It is used by the tab element to
         // indicate which recipient is to sign the Document.
         'recipientId' => 'string',
@@ -1172,13 +1428,13 @@ class Parameters
         // attributes:
         //  - name: The name of the SAML assertion attribute.
         //  - value: The value associated with the named SAML assertion attribute.
-        'samlAuthentication' => array(), // samlAssertion Attributes
+        'samlAuthentication' => [], // samlAssertion Attributes
         // Optional element. senderProvidedNumbers. Contains the element:
-        'smsAuthentication' => array(
+        'smsAuthentication' => [
             // Array with a list of phone numbers the
             // recipient may use for SMS text authentication.
-            'senderProvideNumbers' => array()
-        ),
+            'senderProvideNumbers' => []
+        ],
         // Lists the social ID type that can be used for recipient authentication.
         'socialAuthentications' => 'boolean',
         // Optional element. Used only when working with template recipients.
@@ -1253,7 +1509,7 @@ class Parameters
         // Optional element only used with recipient types In Person Signers
         // and Signers. Specifies the Tabs associated with the recipient.
         // See the Tab Parameters section for more information about tabs.
-        'tabs' => array(), // Tab
+        'tabs' => [], // Tab
         // Sets if the signer is an offline signer.
         // The only accepted value is: offline.
         // Note: This is required if the signer is an offline signer.
@@ -1277,7 +1533,7 @@ class Parameters
         // of the attributes. This information is added to the Offline
         // Signing section of the Certificate of Completion.
         // The possible attributes are:
-        'offlineAttributes' => array(
+        'offlineAttributes' => [
             // Information about the type of device used for offline signing.
             'deviceName' => 'string',
             // Information about the model of the device used for offline signing.
@@ -1289,6 +1545,6 @@ class Parameters
             // GUID of the account. This can be retrieved with the
             // Get Consumer Disclosure call.
             'accountEsignId' => 'string',
-        ),
-    );
+        ],
+    ];
 }

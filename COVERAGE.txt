@@ -1,3 +1,63 @@
+==== Completed ====
+
+DocuSign\Service\Authentication
+    - GET    /login_information
+    - PUT    /login_information/password
+    - POST   /oauth2/revoke
+    - POST   /oauth2/token
+
+DocuSign\Service\Accounts
+    - GET    /accounts/{accountId}/brands
+[x] - POST   /accounts/{accountId}/brands
+[x] - DELETE /accounts/{accountId}/brands
+[x] - DELETE /accounts/{accountId}/captive_recipients/signature
+    - GET    /accounts/{accountId}/consumer_disclosure
+    - GET    /accounts/{accountId}/custom_fields
+    - GET    /accounts/{accountId}/folders
+    - GET    /accounts/{accountId}/folders/{folderId}
+    - PUT    /accounts/{accountId}/folders/{folderId}
+    - GET    /accounts/{accountId}/groups
+    - POST   /accounts/{accountId}/groups
+    - PUT    /accounts/{accountId}/groups
+    - DELETE /accounts/{accountId}/groups
+    - GET    /accounts/{accountId}/groups/{groupId}/brands
+    - PUT    /accounts/{accountId}/groups/{groupId}/brands
+    - DELETE /accounts/{accountId}/groups/{groupId}/brands
+    - GET    /accounts/{accountId}/groups/{groupId}/users
+    - PUT    /accounts/{accountId}/groups/{groupId}/users
+    - DELETE /accounts/{accountId}/groups/{groupId}/users
+    - GET    /accounts/{accountId}/permission_profiles
+    - GET    /accounts/{accountId}/recipient_names
+    - GET    /accounts/{accountId}/settings
+    - PUT    /accounts/{accountId}/settings
+    - GET    /accounts/{accountId}/unsupported_file_types
+
+DocuSign\Service\Distributor
+[x] - POST   /accounts
+    - GET    /accounts/{accountId}
+[x] - DELETE /accounts/{accountId}
+    - GET    /accounts/{accountId}/billing_plan
+[x] - PUT    /accounts/{accountId}/billing_plan
+[x] - PUT    /accounts/{accountId}/billing_plan/purchased_envelopes
+[x] - GET    /accounts/provisioning
+[x] - GET    /billing_plans
+[x] - GET    /billing_plans/{planId}
+
+==== In Progress ====
+
+DocuSign\Service\Templates
+    - GET    /accounts/{accountId}/templates
+    - POST   /accounts/{accountId}/templates
+    - GET    /accounts/{accountId}/templates/{templateId}
+    - GET    /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
+    - POST   /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
+    - PUT    /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
+    - DELETE /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
+    - PUT    /accounts/{accountId}/templates/{templateId}/groups
+    - DELETE /accounts/{accountId}/templates/{templateId}/groups
+
+==== TODO ====
+
 DocuSign\Service\Documents
     - GET    /accounts/{accountId}/envelopes/{envelopeId}/documents
     - PUT    /accounts/{accountId}/envelopes/{envelopeId}/documents
@@ -130,103 +190,4 @@ DocuSign\Service\Users
     - PUT    /accounts/{accountId}/users/{userId}/social
     - DELETE /accounts/{accountId}/users/{userId}/social
 
-DocuSign\Service\Templates
-    - GET    /accounts/{accountId}/templates
-    - POST   /accounts/{accountId}/templates
 
-    - GET    /accounts/{accountId}/templates/{templateId}
-
-    - GET    /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
-    - POST   /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
-    - PUT    /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
-    - DELETE /accounts/{accountId}/templates/{templateId}/documents/{documentId}/fields
-
-    - PUT    /accounts/{accountId}/templates/{templateId}/groups
-    - DELETE /accounts/{accountId}/templates/{templateId}/groups
-
-DocuSign\Service\Authentication
-    + GET    /login_information
-
-    + PUT    /login_information/password
-
-    - POST   /oauth2/revoke
-
-    - POST   /oauth2/token
-
-DocuSign\Service\Accounts
-    - POST    /accounts
-
-    - GET     /accounts/{accountId}
-    - DELETE  /accounts/{accountId}
-
-    - GET     /accounts/{accountId}/billing_plan
-    - PUT     /accounts/{accountId}/billing_plan
-
-    - PUT     /accounts/{accountId}/billing_plan/purchased_envelopes
-
-    - GET    /accounts/{accountId}/brands
-    - POST   /accounts/{accountId}/brands
-    - DELETE /accounts/{accountId}/brands
-
-    - DELETE /accounts/{accountId}/captive_recipients/signature
-
-    - GET    /accounts/{accountId}/consumer_disclosure
-
-    - GET    /accounts/{accountId}/custom_fields
-
-    - GET    /accounts/{accountId}/folders
-
-    - GET    /accounts/{accountId}/folders/{folderId}
-    - PUT    /accounts/{accountId}/folders/{folderId}
-
-    - GET    /accounts/{accountId}/groups
-    - POST   /accounts/{accountId}/groups
-    - PUT    /accounts/{accountId}/groups
-
-    - GET    /accounts/{accountId}/groups/{groupId}/brands
-    - PUT    /accounts/{accountId}/groups/{groupId}/brands
-    - DELETE /accounts/{accountId}/groups/{groupId}/brands
-
-    - GET    /accounts/{accountId}/groups/{groupId}/users
-    - PUT    /accounts/{accountId}/groups/{groupId}/users
-    - DELETE /accounts/{accountId}/groups/{groupId}/users
-
-    - GET    /accounts/{accountId}/permission_profiles
-
-    - GET    /accounts/{accountId}/recipient_names
-
-    - GET    /accounts/{accountId}/settings
-    - PUT    /accounts/{accountId}/settings
-
-    - GET    /accounts/{accountId}/unsupported_file_types
-
-    - GET    /accounts/provisioning
-
-    - GET    /billing_plans
-
-    - GET    /billing_plans/{planId}
-
-Complex Types:
-    - address
-    - addressInformation
-    - authenticationMethods
-    - billingAddress
-    - connectDebugLog
-    - creditCardInformation
-    - currencyPlanPrices
-    - customFields
-    - documents
-    - envelopeTemplateDefinition
-    - eventNotification
-    - forgottenPasswordInfo
-    - idCheckInformationInput
-    - initialUser
-    - notification (reminders, expirations)
-    - planFeatureSets
-    - planInformation
-    - recipientAttachment
-    - referralInformation
-    - seatDiscounts
-    - socialAccountInformation.
-    - usageHistory
-    - userDetails

@@ -21,7 +21,7 @@ class User extends DocuSign\Model
 {
     // userSettings:canEditSharedAddressBook
     const ADRESS_BOOK_ACL_NONE                   = 'None';
-    const ADRESS_BOOK_ACL_USE_ONLY_SHARED,       = 'UseOnlyShared';
+    const ADRESS_BOOK_ACL_USE_ONLY_SHARED        = 'UseOnlyShared';
     const ADRESS_BOOK_ACL_USE_PRIVATE_AND_SHARED = 'UsePrivateAndShared';
     const ADRESS_BOOK_ACL_SHARE                  = 'Share';
 
@@ -48,5 +48,67 @@ class User extends DocuSign\Model
     public function __construct(array $row = array())
     {
         $this->assignData($row);
+    }
+
+    public function setId($id)
+    {
+        $this->setUserId($id);
+    }
+
+    public function getId()
+    {
+        return $this->getUserId();
+    }
+
+    public function setSettings(array $information)
+    {
+        $item = [];
+
+        // parse the information against the whitelist.
+        foreach ($information as $key => $value) {
+            if (isset(DocuSign\Parameters::$userSettings[$key])) {
+                $format = DocuSign\Parameters::$userSettings[$key];
+                if (   (is_string($format) && gettype($value) === $format)
+                    || (is_array($format)  && in_array($value, $format))) {
+                    $item[$key] = $value;
+                }
+            }
+        }
+
+        $this->setUserSettings($item);
+    }
+
+    public function setForgottenPassword($information)
+    {
+        $list = [];
+
+        foreach ($information as $i => $row) {
+            $num = $i + 1;
+            $prefix = 'forgottenPassword';
+            $aKey = sprintf('%sAnswer%d', $prefix, $num);
+            $qKey = sprintf('%sQuestion%d', $prefix, $num);
+            $list[$qKey] = $row['question'];
+            $list[$aKey] = $row['answer'];
+        }
+
+        $this->setForgottenPasswordInfo($list);
+    }
+
+    public function setGroups($information)
+    {
+        $list = [];
+
+        foreach ($information as $group) {
+            $this->filterData($group, [
+                'groupId',
+                'groupName',
+                'permissionProfileId',
+                'groupType'
+            ]);
+
+            $list[] = $group;
+        }
+
+        $this->setGroupList($list);
     }
 }

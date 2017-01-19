@@ -4,11 +4,34 @@
          bootstrap="tests/Bootstrap.php"
 >
     <testsuites>
-        <testsuite>
+        <testsuite name="InProgress">
+            <file>tests/Services/Templates/TemplatesTest.php</file>
+        </testsuite>
+        <testsuite name="Authentication">
+            <file>tests/Services/Authentication/LoginInformationTest.php</file>
+            <file>tests/Services/Authentication/OAuth2AuthorizationTest.php</file>
+        </testsuite>
+        <testsuite name="Accounts">
+            <file>tests/Services/Accounts/AccountsInformationTest.php</file>
+            <file>tests/Services/Accounts/AccountsFoldersTest.php</file>
+            <file>tests/Services/Accounts/AccountsGroupsTest.php</file>
+            <file>tests/Services/Accounts/AccountsDistributorTest.php</file>
+        </testsuite>
+        <testsuite name="Templates">
+            <file>tests/Services/Templates/TemplatesTest.php</file>
+        </testsuite>
+        <testsuite name="Services">
+            <directory>tests/Services/Authentication</directory>
+            <directory>tests/Services/Accounts</directory>
+        </testsuite>
+        <testsuite name="Top">
+            <file>tests/ClientTest.php</file>
+            <file>tests/CredentialsTest.php</file>
+        </testsuite>
+        <testsuite name="All">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
-
     <filter>
         <whitelist>
             <directory>./src/</directory>

@@ -42,10 +42,16 @@ $users = array(
 );
 
 $documentPath = realpath(dirname(__FILE__) . '/files/document.rtf');
+$brandingPath = realpath(dirname(__FILE__) . '/files/branding.zip');
+
+define('DOCUMENT_PATH', $documentPath);
+define('BRANDING_PATH', $brandingPath);
+
+define('DOCUSIGN_EMAIL', $config['email']);
 
 $files = array(
     array(
         'name' => 'Test Document',
-        'path' => $documentPath
+        'path' => DOCUMENT_PATH
     ),
 );

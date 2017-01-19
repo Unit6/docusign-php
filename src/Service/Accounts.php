@@ -29,82 +29,47 @@ class Accounts extends DocuSign\Service
         parent::__construct();
     }
 
-    public function getResource($uri)
-    {
-        $resourceUri = ltrim($uri, '/');
-
-        $url = $this->getEndpoint($resourceUri);
-
-        return $this->request->get($url, $this->client->getHeaders());
-    }
-
-    /**
-     * Create Account
-     *
-     * This creates a new account for using the DocuSign service.
-     *
-     * @param Model\Account $account
-     */
-    public function createAccount(Model\Account $account)
-    {
-        # POST /accounts
-    }
-
     /**
      * Get Account Information
      *
      * This returns the account information for the specified account.
-     */
-    public function getAccount()
-    {
-        # GET /accounts/{accountId}
-    }
-
-    /**
-     * Delete Account
      *
-     * This deletes the specified account.
+     * GET /accounts/{accountId}
      */
-    public function deleteAccount()
+    public static function getAccount($accountId = null)
     {
-        # DELETE /accounts/{accountId}
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers
+        ];
+
+        // when requesting as a distributor, allow the specifing of accountId
+        $uri = ($accountId ? sprintf('accounts/%s', $accountId) : '/');
+
+        return DocuSign\Request::get($uri, $options);
     }
 
     /**
      * Get Account Billing Plan
      *
      * This returns the billing plan information for the specified account.
+     *
+     * GET /accounts/{accountId}/billing_plan
      */
-    public function getAccountBillingPlan()
+    public static function getAccountBillingPlan($accountId = null)
     {
-        # GET /accounts/{accountId}/billing_plan
-    }
+        $headers = self::getClientHeaders();
 
-    /**
-     * Update Account Billing Plan
-     *
-     * This updates the billing plan for the specified account.
-     *
-     * @param Model\BillingPlan $billingPlan
-     */
-    public function updateAccountBillingPlan(Model\BillingPlan $billingPlan)
-    {
-        # PUT /accounts/{accountId}/billing_plan
-    }
+        $options = [
+            'headers' => $headers
+        ];
 
-    /**
-     * Purchase Additional Envelopes
-     *
-     * IMPORTANT: At this time, this operation is limited to DocuSign
-     * internal use only.
-     *
-     * This completes the purchase of envelopes for your account. The actual
-     * purchase is done as part of an internal workflow interaction with
-     * an envelope vendor.
-     */
-    public function updateAccountbillingPlanPurchasedEnvelopes(array $purchase = array())
-    {
-        # PUT /accounts/{accountId}/billing_plan/purchased_envelopes
+        // when requesting as a distributor, allow the specifing of accountId
+        $uri = ($accountId ? sprintf('accounts/%s/', $accountId) : '')
+            . 'billing_plan';
+
+        return DocuSign\Request::get($uri, $options);
     }
 
     /**
@@ -114,10 +79,18 @@ class Accounts extends DocuSign\Service
      * the default brand profiles. The Account Branding feature (accountSettings
      * "canSelfBrandSend" and "canSelfBrandSend" are true) must be enabled for
      * the account to use this.
+     *
+     * GET /accounts/{accountId}/brands
      */
-    public function getBrandProfile()
+    public static function getBrandProfiles()
     {
-        # GET /accounts/{accountId}/brands
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers
+        ];
+
+        return DocuSign\Request::get('brands', $options);
     }
 
     /**
@@ -136,11 +109,23 @@ class Accounts extends DocuSign\Service
      * When brand profile files are being uploaded, they must be combined
      * into one zip file and the ContentType must be application/zip.
      *
+     * POST /accounts/{accountId}/brands
+     *
      * @param string $zipPath The path to the combined .zip file.
      */
-    public function uploadBrandProfiles($zipPath)
+    public static function uploadBrandProfiles($zipPath)
     {
-        # POST /accounts/{accountId}/brands
+        $headers = self::getClientHeaders();
+        $headers['Content-Type'] = 'application/zip';
+
+        $fh = (is_readable($zipPath) ? fopen($zipPath, 'r') : '');
+
+        $options = [
+            'headers' => $headers,
+            'body' => $fh
+        ];
+
+        return DocuSign\Request::post('brands', $options);
     }
 
     /**
@@ -151,18 +136,33 @@ class Accounts extends DocuSign\Service
      * and "canSelfBrandSend" are true) must be enabled for the account
      * to use this.
      *
+     * DELETE /accounts/{accountId}/brands
+     *
      * @param array $brands List of brand IDs to be deleted.
      */
-    public function deleteBrandProfiles(array $brands = array())
+    public static function deleteBrandProfiles(array $brandsList = array())
     {
-        $data = array(
-            'brands' => array(
-                array( 'brandId' => '' ),
-                array( 'brandId' => '' ),
-            )
-        );
+        $brands = [];
 
-        # DELETE /accounts/{accountId}/brands
+        foreach ($brandsList as $brand) {
+            if ($brand instanceof Model\Brand) {
+                // only the GroupId is needed for deleting.
+                $brands[] = ['brandId' => $brand->getId()];
+            }
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'brands' => $brands
+            ]
+        ];
+
+        var_dump('deleteBrandProfiles', $options); exit;
+
+        return DocuSign\Request::delete('brands', $options);
     }
 
     /**
@@ -173,16 +173,36 @@ class Accounts extends DocuSign\Service
      * to reset the signature associated with a clientUserId so a new
      * signature can be created the next time the clientUserId is used.
      *
+     * DELETE /accounts/{accountId}/captive_recipients/signature
+     *
      * @param array $recipients List of recipients
      */
-    public function deleteCaptiveRecipientSignature(array $recipients = array())
+    public static function deleteCaptiveRecipientSignature(array $recipients = array())
     {
-        $data = array(
-            'captiveRecipients' => array(
-                array( 'email' => '', 'userName' => '', 'clientUserId' => '', )
-            )
-        );
-        # DELETE /accounts/{accountId}/captive_recipients/signature
+        $captiveRecipients = [];
+
+        foreach ($recipients as $recipient) {
+            if ($recipient instanceof Model\Recipient) {
+                $captiveRecipients[] = [
+                    'email' => $recipient->getEmail(),
+                    'userName' => $recipient->getUserName(),
+                    'clientUserId' => $recipient->getClientUserId()
+                ];
+            }
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'captiveRecipients' => $captiveRecipients
+            ]
+        ];
+
+        var_dump('deleteCaptiveRecipientSignature', $options); exit;
+
+        return DocuSign\Request::delete('captive_recipients/signature', $options);
     }
 
     /**
@@ -192,37 +212,44 @@ class Accounts extends DocuSign\Service
      * associated with the account. You can use an optional query
      * string to set the language for the consumer disclosure.
      *
+     * The supported languages, with the language code shown in parenthesis, are:
+     *      Arabic (ar), Bulgarian (bg), Czech (cs), Chinese
+     *      Simplified (zh-CN), Chinese Traditional (zhTW),
+     *      Croatian (hr), Danish (da), Dutch (nl),
+     *      English US (en), English UK (en-GB), Estonian (et),
+     *      Farsi (fa), Finnish (fi), French (fr), French Canada (fr-CA),
+     *      German (de), Greek (el), Hebrew (he), Hindi (hi),
+     *      Hungarian (hu), Bahasa Indonesia (id), Italian (it),
+     *      Japanese (ja), Korean (ko), Latvian (lv), Lithuanian (lt),
+     *      Bahasa Melayu (ms), Norwegian (no), Polish (pl),
+     *      Portuguese (pt), Portuguese Brazil (pt-BR), Romanian (ro),
+     *      Russian (ru), Serbian (sr), Slovak (sk), Slovenian (sl),
+     *      Spanish (es),Spanish Latin America (es-MX), Swedish (sv),
+     *      Thai (th), Turkish (tr), Ukrainian (uk) and Vietnamese (vi).
+     *
+     * Additionally, the value can be set to 'browser' to automatically
+     * detect the browser language being used by the viewer and display
+     * the consumer disclosure in that language.
+     *
+     * GET /accounts/{accountId}/consumer_disclosure?langCode={value}
+     *
      * @param string $langCode The simple type enumeration the
      *                         language used in the response.
      */
-    public function getConsumerDisclaimer($langCode = '')
+    public static function getConsumerDisclaimer($langCode = '')
     {
-        # GET /accounts/{accountId}/consumer_disclosure
-        # ? langCode={value}
+        $headers = self::getClientHeaders();
 
-        /*
-        The supported languages, with
-        the language value shown in parenthesis, are:
-        Arabic (ar), Bulgarian (bg), Czech (cs), Chinese
-        Simplified (zh-CN), Chinese Traditional (zhTW),
-        Croatian (hr), Danish (da), Dutch (nl),
-        English US (en), English UK (en-GB), Estonian
-        (et), Farsi (fa), Finnish (fi), French (fr), French
-        Canada (fr-CA), German (de), Greek (el),
-        Hebrew (he), Hindi (hi), Hungarian (hu), Bahasa
-        Indonesia (id), Italian (it), Japanese (ja), Korean
-        (ko), Latvian (lv), Lithuanian (lt), Bahasa Melayu
-        (ms), Norwegian (no), Polish (pl), Portuguese
-        (pt), Portuguese Brazil (pt-BR), Romanian (ro),
-        Russian (ru), Serbian (sr), Slovak (sk),
-        Slovenian (sl), Spanish (es),Spanish Latin
-        America (es-MX), Swedish (sv), Thai (th),
-        Turkish (tr), Ukrainian (uk) and Vietnamese (vi).
-        Additionally, the value can be set to ‘browser’ to
-        automatically detect the browser language
-        being used by the viewer and display the
-        consumer disclosure in that language.
-        */
+        $options = [
+            'headers' => $headers,
+            'query' => []
+        ];
+
+        if ( ! empty($langCode)) {
+            $options['query']['langCode'] = $langCode;
+        }
+
+        return DocuSign\Request::get('consumer_disclosure', $options);
     }
 
     /**
@@ -240,10 +267,18 @@ class Accounts extends DocuSign\Service
      * custom field lets the sender enter the value for the field. The
      * list custom field lets the sender select the value of the field
      * from a premade list.
+     *
+     * GET /accounts/{accountId}/custom_fields
      */
-    public function getCustomFields()
+    public static function getCustomFields()
     {
-        # GET /accounts/{accountId}/custom_fields
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers
+        ];
+
+        return DocuSign\Request::get('custom_fields', $options);
     }
 
     /**
@@ -253,15 +288,27 @@ class Accounts extends DocuSign\Service
      * folder hierarchy. There is an option to include the list of
      * template folders and templates.
      *
+     * GET /accounts/{accountId}/folders?template={string}
+     *
      * @param string $template The two possible values are "include" or "only."
      *                  - include: The folder list will return normal
      *                             folders plus template folders.
      *                  - only: Only the list of template folders are returned.
      */
-    public function getFolders($template = '')
+    public static function getFolders($template = '')
     {
-        # GET /accounts/{accountId}/folders
-        # ? template={string}
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'query' => []
+        ];
+
+        if ( ! empty($template)) {
+            $options['query']['template'] = $template;
+        }
+
+        return DocuSign\Request::get('folders', $options);
     }
 
     /**
@@ -269,6 +316,8 @@ class Accounts extends DocuSign\Service
      *
      * Returns a list of the envelopes in the specified folder.
      * You can narrow the query by adding some optional items.
+     *
+     * GET /accounts/{accountId}/folders/{folderId}/?{query:criteria}
      *
      * @param string $folderId
      * @param array  $criteria Contains parameters:
@@ -280,12 +329,18 @@ class Accounts extends DocuSign\Service
      *                         - owner_name={username}
      *                         - owner_email={email}
      */
-    public function getFolder($folderId, array $criteria = array())
+    public static function getFolder($folderId, array $criteria = array())
     {
-        # GET /accounts/{accountId}/folders/{folderId}
-        # ? start_position={ integer}, from_date = {date/time}, to_date= {date/time},
-        #      search_text={text}, status={envelope status}, owner_name={username},
-        #      owner_email={email}
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'query' => $criteria
+        ];
+
+        $uri = sprintf('folders/%s', $folderId );
+
+        return DocuSign\Request::get($uri, $options);
     }
 
     /**
@@ -295,28 +350,45 @@ class Accounts extends DocuSign\Service
      *
      * Note: This can be used to delete envelopes by using "recyclebin" as folderId.
      *
+     * PUT /accounts/{accountId}/folders/{folderId}
+     *
      * @param string $folderId
      * @param string $fromFolderId The folder ID the envelope is being moved from.
      * @param array  $envelopeIds  The envelope ID for the envelope that is being moved.
      */
-    public function updateFolder($folderId, $fromFolderId, array $envelopeIds = array())
+    public static function updateFolder($folderId, $fromFolderId, array $envelopeIds = array())
     {
-        $data = array(
-            'envelopeIds'  => $envelopeIds,
-            'fromFolderId' => $fromFolderId
-        );
+        $headers = self::getClientHeaders();
 
-        # PUT /accounts/{accountId}/folders/{folderId}
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'envelopeIds'  => $envelopeIds,
+                'fromFolderId' => $fromFolderId
+            ]
+        ];
+
+        $uri = sprintf('folders/%s', $folderId );
+
+        return DocuSign\Request::put($uri, $options);
     }
 
     /**
      * Get Group Information
      *
      * This retrieves information about groups associated with the account.
+     *
+     * GET /accounts/{accountId}/groups
      */
-    public function getGroups()
+    public static function getGroups()
     {
-        # GET /accounts/{accountId}/groups
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers
+        ];
+
+        return DocuSign\Request::get('groups', $options);
     }
 
     /**
@@ -331,15 +403,30 @@ class Accounts extends DocuSign\Service
      * of users. Groups can also be used with template sharing to limit user
      * access to templates.
      *
+     * POST /accounts/{accountId}/groups
+     *
      * @param array $groups Collection of Model\Group
      */
-    public function addGroups(array $groups = array())
+    public static function addGroups(array $groupsList = array())
     {
-        $data = array(
-            'groups' => $groups
-        );
+        $groups = [];
 
-        # POST /accounts/{accountId}/groups
+        foreach ($groupsList as $group) {
+            if ($group instanceof Model\Group) {
+                $groups[] = $group->getData();
+            }
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'groups' => $groups
+            ]
+        ];
+
+        return DocuSign\Request::post('groups', $options);
     }
 
     /**
@@ -348,15 +435,62 @@ class Accounts extends DocuSign\Service
      * This lets you modify a group name and modify, or set, the
      * permission profile for the group.
      *
+     * PUT /accounts/{accountId}/groups
+     *
      * @param array $groups Collection of Model\Group
      */
-    public function updateGroups(array $groups = array())
+    public static function updateGroups(array $groupsList = array())
     {
-        $data = array(
-            'groups' => $groups
-        );
+        $groups = [];
 
-        # PUT /accounts/{accountId}/groups
+        foreach ($groupsList as $group) {
+            if ($group instanceof Model\Group) {
+                $groups[] = $group->getData();
+            }
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'groups' => $groups
+            ]
+        ];
+
+        return DocuSign\Request::put('groups', $options);
+    }
+
+    /**
+     * Delete Group Information
+     *
+     * This deletes an existing user group.
+     *
+     * DELETE /accounts/{accountId}/groups
+     *
+     * @param array $groups Collection of Model\Group
+     */
+    public static function deleteGroups(array $groupsList = array())
+    {
+        $groups = [];
+
+        foreach ($groupsList as $group) {
+            if ($group instanceof Model\Group) {
+                // only the GroupId is needed for deleting.
+                $groups[] = ['groupId' => $group->getId()];
+            }
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'groups' => $groups
+            ]
+        ];
+
+        return DocuSign\Request::delete('groups', $options);
     }
 
     /**
@@ -365,11 +499,21 @@ class Accounts extends DocuSign\Service
      * This returns information about the brands associated with
      * the requested group.
      *
+     * GET /accounts/{accountId}/groups/{groupId}/brands
+     *
      * @param string $groupId
      */
-    public function getGroupBrands($groupId)
+    public static function getGroupBrands($groupId)
     {
-        # GET /accounts/{accountId}/groups/{groupId}/brands
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers
+        ];
+
+        $uri = sprintf('groups/%s/brands', $groupId);
+
+        return DocuSign\Request::get($uri, $options);
     }
 
     /**
@@ -377,12 +521,33 @@ class Accounts extends DocuSign\Service
      *
      * This adds brand information to a group.
      *
+     * PUT /accounts/{accountId}/groups/{groupId}/brands
+     *
      * @param string $groupId
      * @param array  $brands  Collection of Model\Brand
      */
-    public function addGroupBrands($groupId, $brands)
+    public static function addGroupBrands($groupId, array $brandsList = array())
     {
-        # PUT /accounts/{accountId}/groups/{groupId}/brands
+        $brands = [];
+
+        foreach ($brandsList as $brand) {
+            if ($brand instanceof Model\Brand) {
+                $brands[] = $brand->getData();
+            }
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'brands' => $brands
+            ]
+        ];
+
+        $uri = sprintf('groups/%s/brands', $groupId);
+
+        return DocuSign\Request::put($uri, $options);
     }
 
     /**
@@ -390,20 +555,34 @@ class Accounts extends DocuSign\Service
      *
      * This removes brand information from the requested group.
      *
+     * DELETE /accounts/{accountId}/groups/{groupId}/brands
+     *
      * @param string $groupId
      * @param array $brands The brandId of the brand profile being removed
      *                      from the group.
      */
-    public function deleteGroupBrands($groupId, array $brands = array())
+    public static function deleteGroupBrands($groupId, array $brandsList = array())
     {
-        $data = array(
-            'brands' => array(
-                array( 'brandId' => '' ),
-                array( 'brandId' => '' ),
-            )
-        );
+        $brands = [];
 
-        # DELETE /accounts/{accountId}/groups/{groupId}/brands
+        foreach ($brandsList as $brand) {
+            if ($brand instanceof Model\Brand) {
+                $brands[] = ['brandId' => $brand->getId()];
+            }
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'brands' => $brands
+            ]
+        ];
+
+        $uri = sprintf('groups/%s/brands', $groupId);
+
+        return DocuSign\Request::delete($uri, $options);
     }
 
     /**
@@ -411,11 +590,21 @@ class Accounts extends DocuSign\Service
      *
      * This retrieves a list of users in a group.
      *
+     * GET /accounts/{accountId}/groups/{groupId}/users
+     *
      * @param string $groupId
      */
-    public function getGroupUsers($groupId)
+    public static function getGroupUsers($groupId)
     {
-        # GET /accounts/{accountId}/groups/{groupId}/users
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers
+        ];
+
+        $uri = sprintf('groups/%s/users', $groupId);
+
+        return DocuSign\Request::get($uri, $options);
     }
 
     /**
@@ -423,20 +612,34 @@ class Accounts extends DocuSign\Service
      *
      * This adds one or more users to an existing group.
      *
+     * PUT /accounts/{accountId}/groups/{groupId}/users
+     *
      * @param string $groupId
      * @param array  $users   The user ID number for a user being added
      *                        to the group.
      */
-    public function addGroupUsers($groupId, array $users = array())
+    public static function addGroupUsers($groupId, array $usersList = array())
     {
-        $data = array(
-            'users' => array(
-                array( 'userId' => '' ),
-                array( 'userId' => '' ),
-            )
-        );
+        $users = [];
 
-        # PUT /accounts/{accountId}/groups/{groupId}/users
+        foreach ($usersList as $user) {
+            if ($user instanceof Model\User) {
+                $users[] = ['userId' => $user->getId()];
+            }
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'users' => $users
+            ]
+        ];
+
+        $uri = sprintf('groups/%s/users', $groupId);
+
+        return DocuSign\Request::put($uri, $options);
     }
 
     /**
@@ -444,14 +647,34 @@ class Accounts extends DocuSign\Service
      *
      * This removes one or more users from a group.
      *
+     * DELETE /accounts/{accountId}/groups/{groupId}/users
+     *
      * @param string $groupId
      * @param array  $users    The user ID number for a user being removed
      *                         from the group.
      */
-    public function deleteGroupUsers($groupId, array $users = array())
+    public static function deleteGroupUsers($groupId, array $usersList = array())
     {
+        $users = [];
 
-        # DELETE /accounts/{accountId}/groups/{groupId}/users
+        foreach ($usersList as $user) {
+            if ($user instanceof Model\User) {
+                $users[] = ['userId' => $user->getId()];
+            }
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'users' => $users
+            ]
+        ];
+
+        $uri = sprintf('groups/%s/users', $groupId);
+
+        return DocuSign\Request::delete($uri, $options);
     }
 
     /**
@@ -465,10 +688,18 @@ class Accounts extends DocuSign\Service
      *
      * Currently Permission Profiles can only be created and modified in
      * the DocuSign console.
+     *
+     * GET /accounts/{accountId}/permission_profiles
      */
-    public function getPermissionProfiles()
+    public static function getPermissionProfiles()
     {
-        # GET /accounts/{accountId}/permission_profiles
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers
+        ];
+
+        return DocuSign\Request::get('permission_profiles', $options);
     }
 
     /**
@@ -477,21 +708,40 @@ class Accounts extends DocuSign\Service
      * This returns a list of recipients that are available for the given
      * email address.
      *
+     * GET /accounts/{accountId}/recipient_names
+     *
      * @param string $email The email address for the user.
      */
-    public function getRecipientNames($email)
+    public static function getRecipientNames($email)
     {
-        # GET /accounts/{accountId}/recipient_names
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'query' => [
+                'email' => $email
+            ]
+        ];
+
+        return DocuSign\Request::get('recipient_names', $options);
     }
 
     /**
      * Get Account Settings
      *
      * This returns the account settings information for the specified account.
+     *
+     * GET /accounts/{accountId}/settings
      */
-    public function getSettings()
+    public static function getSettings()
     {
-        # GET /accounts/{accountId}/settings
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers
+        ];
+
+        return DocuSign\Request::get('settings', $options);
     }
 
     /**
@@ -499,22 +749,30 @@ class Accounts extends DocuSign\Service
      *
      * This updates the account settings list for the specified account.
      *
+     * PUT /accounts/{accountId}/settings
+     *
      * @param array $accountSettings The name/value pair information for
      *                               account settings. These determine the
      *                               features available for the account. See
      *                               the accountSettings list for more
      *                               information about the accountSettings.
      */
-    public function updateSettings(array $accountSettings = array())
+    public static function updateSettings(array $settingsList = array())
     {
-        $data = array(
-            'accountSettings' => array(
-                array( 'name' => '', 'value' => '' ),
-                array( 'name' => '', 'value' => '' )
-            )
-        );
+        $settings = [];
 
-        # PUT /accounts/{accountId}/settings
+        foreach ($settingsList as $name => $value) {
+            $settings[] = ['name' => $name, 'value' => $value];
+        }
+
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'json' => $settings
+        ];
+
+        return DocuSign\Request::put('settings', $options);
     }
 
     /**
@@ -522,46 +780,17 @@ class Accounts extends DocuSign\Service
      *
      * Retrieves a list of file types (mime-types and file-extensions)
      * that are not supported for upload through the DocuSign system.
+     *
+     * GET /accounts/{accountId}/unsupported_file_types
      */
-    public function getUnsupportedFileTypes()
+    public static function getUnsupportedFileTypes()
     {
-        # GET /accounts/{accountId}/unsupported_file_types
-    }
+        $headers = self::getClientHeaders();
 
-    /**
-     * Get Account Provisioning Information
-     *
-     * This returns the account provisioning information.
-     *
-     * Note: This request requires a DocuSign Integrator Key and the
-     * DocuSign AppToken information. The AppToken is used to determine
-     * the account provisioning information that is returned and is
-     * provided by the group provisioning the account.
-     */
-    public function getAccountProvisioning()
-    {
-        # GET /accounts/provisioning
-    }
+        $options = [
+            'headers' => $headers
+        ];
 
-    /**
-     * Get List of Billing Plans
-     *
-     * This returns the billing plans associated with a distributor.
-     */
-    public function getBillingPlans()
-    {
-        # GET /billing_plans
-    }
-
-    /**
-     * Get Billing Plan Details
-     *
-     * This returns the billing plan details for the specified billing plan ID.
-     *
-     * @param string $planId
-     */
-    public function getBillingPlan($planId)
-    {
-        # GET /billing_plans/{planId}
+        return DocuSign\Request::get('unsupported_file_types', $options);
     }
 }

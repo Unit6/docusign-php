@@ -48,13 +48,17 @@ class Authentication extends DocuSign\Service
      * Before sending any requests, you need to login to the system
      * to get the account and baseUrl information for future calls.
      */
-    public function getLoginInformation()
+    public static function getLoginInformation()
     {
         # GET /login_information
 
-        $this->url = $this->getEndpoint('login_information');
+        $headers = self::getClientHeaders();
 
-        return $this->request->get($this->url, $this->client->getHeaders());
+        $options = [
+            'headers' => $headers
+        ];
+
+        return DocuSign\Request::get('login_information', $options);
     }
 
     /**
@@ -66,24 +70,19 @@ class Authentication extends DocuSign\Service
     {
         # PUT /login_information/password
 
-        $this->url = $this->getEndpoint('login_information/password');
-
         $credentials = $this->client->getCredentials();
+        $headers = $this->client->getHeaders();
 
-        $data = array(
-            'currentPassword' => $credentials->getPassword(),
-            'email'           => $credentials->getEmail(),
-            'newPassword'     => $newPassword
-        );
+        $options = [
+            'headers' => $headers,
+            'json' => [
+                'currentPassword' => $credentials->getPassword(),
+                'email'           => $credentials->getEmail(),
+                'newPassword'     => $newPassword
+            ]
+        ];
 
-        $json = json_encode($data);
-
-        return $this->request->put(
-            $this->url,
-            $this->client->getHeaders(),
-            array(),
-            $json
-        );
+        return DocuSign\Request::put('login_information/password', $options);
     }
 
     /**
@@ -96,20 +95,17 @@ class Authentication extends DocuSign\Service
     {
         # POST /oauth2/revoke
 
-        $this->url = $this->getEndpoint('oauth2/revoke');
+        $options = [
+            'headers' => [
+                'Accept'       => 'application/json',
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ],
+            'form_params' => [
+                'token' => $token
+            ]
+        ];
 
-        $headers = array(
-            'Accept: application/json',
-            'Content-Type: application/x-www-form-urlencoded'
-        );
-
-        $data = array(
-            'token' => $token
-        );
-
-        $query = http_build_query($data);
-
-        return $this->request->post($this->url, $headers, array(), $query);
+        return DocuSign\Request::post('oauth2/revoke', $options);
     }
 
 
@@ -125,26 +121,23 @@ class Authentication extends DocuSign\Service
     {
         # POST /oauth2/token
 
-        $this->url = $this->getEndpoint('oauth2/token');
-
-        $headers = array(
-            'Accept: application/json',
-            'Content-Type: application/x-www-form-urlencoded'
-        );
-
         $credentials = $this->client->getCredentials();
 
-        $data = array (
-            'grant_type' => 'password',
-            'scope'      => 'api',
-            'client_id'  => $credentials->getIntegratorKey(),
-            'username'   => $credentials->getEmail(),
-            'password'   => $credentials->getPassword()
-        );
+        $options = [
+            'headers' => [
+                'Accept'       => 'application/json',
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ],
+            'form_params' => [
+                'grant_type' => 'password',
+                'scope'      => 'api',
+                'client_id'  => $credentials->getIntegratorKey(),
+                'username'   => $credentials->getEmail(),
+                'password'   => $credentials->getPassword()
+            ]
+        ];
 
-        $query = http_build_query($data);
-
-        return $this->request->post($this->url, $headers, array(), $query);
+        return DocuSign\Request::post('oauth2/token', $options);
     }
 
     /**
@@ -157,26 +150,23 @@ class Authentication extends DocuSign\Service
     {
         # POST /oauth2/token
 
-        $this->url = $this->getEndpoint('oauth2/token');
-
-        $headers = array(
-            'Authorization: bearer ' . $bearer,
-            'Accept: application/json',
-            'Content-Type: application/x-www-form-urlencoded'
-        );
-
         $credentials = $this->client->getCredentials();
 
-        $data = array(
-            'grant_type' => 'password',
-            'scope'      => 'api',
-            'client_id'  => $credentials->getIntegratorKey(),
-            'username'   => $username,
-            'password'   => 'password'
-        );
+        $options = [
+            'headers' => [
+                'Authorization' => 'bearer ' . $bearer,
+                'Accept'        => 'application/json',
+                'Content-Type'  => 'application/x-www-form-urlencoded'
+            ],
+            'form_params' => [
+                'grant_type' => 'password',
+                'scope'      => 'api',
+                'client_id'  => $credentials->getIntegratorKey(),
+                'username'   => $username,
+                'password'   => 'password'
+            ]
+        ];
 
-        $query = http_build_query($data);
-
-        return $this->request->post($this->url, $headers, array(), $query);
+        return DocuSign\Request::post('oauth2/token', $options);
     }
 }

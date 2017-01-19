@@ -72,8 +72,6 @@ class Client implements ClientInterface
             $this->accountId   = $config['account_id'];
         }
 
-        $this->request = new Request();
-
         self::setInstance($this);
     }
 
@@ -87,18 +85,41 @@ class Client implements ClientInterface
         return self::$instance;
     }
 
+    public function request()
+    {
+
+    }
+
+    public function getEndpoint($uri = '')
+    {
+        // NOTE: The first request will authenticate on the standard endpoint.
+        //       Once a baseUrl has been set, all subsequent requests should
+        //       use that server endpoint.
+        $base = $this->getBaseUrl();
+
+        if (is_null($base)) {
+            $base = sprintf(
+                'https://%s.docusign.net/restapi/v%d',
+                $this->getEnvironment(),
+                $this->getVersion()
+            );
+        }
+
+        return $base . '/' . $uri;
+    }
+
     public function authenticate()
     {
-        $service = new Service\Authentication();
-
         try {
-            $response = $service->getLoginInformation();
+            $response = Service\Authentication::getLoginInformation();
 
-            if ( ! isset($response['loginAccounts'])) {
+            $json = $response['json'];
+
+            if ( ! isset($json['loginAccounts'])) {
                 throw new Exception\Client('DocuSign loginAccounts not found.');
             }
 
-            $accounts = $response['loginAccounts'];
+            $accounts = $json['loginAccounts'];
 
             // detect whether there are multiple accounts.
             $this->hasMultipleAccounts = (count($accounts) > 1);
@@ -138,8 +159,8 @@ class Client implements ClientInterface
     }
 
     public function getHeaders(
-            $accept = 'Accept: application/json',
-            $contentType = 'Content-Type: application/json'
+            $accept = 'application/json',
+            $contentType = 'application/json'
         )
     {
         $authentication = '<DocuSignCredentials>'
@@ -149,9 +170,9 @@ class Client implements ClientInterface
             . '</DocuSignCredentials>';
 
         return array(
-            'X-DocuSign-Authentication: ' . $authentication,
-            $accept,
-            $contentType
+            'X-DocuSign-Authentication' => $authentication,
+            'Accept' => $accept,
+            'Content-Type' => $contentType
         );
     }
 

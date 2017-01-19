@@ -19,8 +19,32 @@ use Unit6\DocuSign;
  */
 class Group extends DocuSign\Model
 {
+    const TYPE_ADMIN    = 'adminGroup';    // groupName=Administrators
+    const TYPE_EVERYONE = 'everyoneGroup'; // groupName=Everyone
+    const TYPE_CUSTOM   = 'customGroup';   // groupName={YourChosenGroupName}
+
     public function __construct(array $row = array())
     {
         $this->assignData($row);
+    }
+
+    public function setId($id)
+    {
+        $this->setGroupId($id);
+    }
+
+    public function getId()
+    {
+        return $this->getGroupId();
+    }
+
+    public function setName($name)
+    {
+        $this->setGroupName($name);
+    }
+
+    public function getName()
+    {
+        $this->getGroupName();
     }
 }

@@ -10,27 +10,130 @@
 
 namespace Unit6\DocuSign;
 
+use GuzzleHttp;
+
 /**
  * Request class for handling DocuSign requests.
  *
  * @author Unit6 <team@unit6websites.com>
  */
-class Request implements RequestInterface
+class Request #implements RequestInterface
 {
-    const METHOD_GET  = 'GET';
-    const METHOD_POST = 'POST';
-    const METHOD_PUT  = 'PUT';
-    const METHOD_DELETE = 'DELETE';
-
-    protected static $events = array();
-    protected static $eventsNum = 0;
+    private static $methods = ['get', 'post', 'put', 'delete'];
+    private static $events = [];
+    private static $eventsNum = 0;
 
     public function __construct()
     {
         //
     }
 
-    public static function eventInitiate($method, $url, array $headers = array(), $payload)
+    public static function __callStatic($name, $arguments)
+    {
+        if (in_array($name, self::$methods)) {
+            $method = strtoupper($name);
+            $uri = array_shift($arguments);
+            $options = array_shift($arguments);
+            return self::execute($method, $uri, $options);
+        }
+
+        throw new Exception\Model('Undefined method in Request class.');
+    }
+
+    /**
+     * Execute a DocuSign cURL Request.
+     */
+    public static function execute($method = 'GET', $uri, array $options = array())
+    {
+        $client = Client::getInstance();
+        $url = $client->getEndpoint($uri === '/' ? '' : $uri);
+
+        /*
+        $defaultHeaders = [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/x-www-form-urlencoded'
+        ];
+
+        $options['headers'] = array_merge($defaultHeaders, $options['headers']);
+        */
+
+        self::eventInitiate($method, $url, $options);
+
+        /*
+        $handler = GuzzleHttp\HandlerStack::create();
+
+        $middleware = GuzzleHttp\Middleware::mapResponse(function (GuzzleHttp\Psr7\Response $response) {
+            $body = $response->getBody();
+            $contents = $body->getContents();
+            $response->json = json_decode($contents, $assoc = true);
+            return $response->withHeader('X-Foo', 'bar');
+        });
+
+        $handler->push($middleware, 'json_decode');
+
+        $http = new GuzzleHttp\Client([
+            'handler'  => $handler,
+            'timeout'  => 5.0
+        ]);
+        */
+
+        $http = new GuzzleHttp\Client([
+           # 'debug' => true,
+            'timeout'  => 5.0
+        ]);
+
+        $request = new GuzzleHttp\Psr7\Request($method, $url);
+
+        try {
+            $response = $http->send($request, $options);
+        } catch (GuzzleHttp\Exception\RequestException $e) {
+            self::eventUpdate($e->getMessage());
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+            } else {
+                throw new Exception\Request($e->getMessage());
+            }
+        }
+
+        self::eventUpdate($response->getStatusCode());
+
+        $body = $response->getBody();
+        $contents = $body->getContents();
+
+        $json = [];
+        $jsonError = 0;
+
+        if ($response->hasHeader('Content-Type')
+            && strpos($response->getHeaderLine('Content-Type'), 'application/json') === 0) {
+            $json = json_decode($contents, $assoc = true);
+            $jsonError = json_last_error();
+        }
+
+        if (isset($json['errorCode'], $json['message'])) {
+            $errorMessage = $json['errorCode'] . ': ' . $json['message'];
+            self::eventUpdate($errorMessage);
+            throw new Exception\Request($errorMessage);
+        }
+
+        $headers = array();
+
+        foreach ($response->getHeaders() as $key => $value) {
+            $headers[$key] = $response->getHeaderLine($key);
+        }
+
+        $response = [
+            'status' => $response->getReasonPhrase(), // OK
+            'statusCode' => $response->getStatusCode(), // 200,
+            'headers' => $headers,
+            'contents' => $contents,
+            'json'=> $json,
+            'jsonError'=> $jsonError,
+        ];
+
+        return $response;
+    }
+
+    public static function eventInitiate($method, $url, array $options = array())
     {
         self::$eventsNum += 1;
 
@@ -39,8 +142,7 @@ class Request implements RequestInterface
         self::$events[$i] = array(
             'method'  => $method,
             'url'     => $url,
-            'headers' => $headers,
-            'payload' => $payload,
+            'options' => $options,
             'status'  => 'initiated',
         );
     }
@@ -55,106 +157,5 @@ class Request implements RequestInterface
     public static function getEvents()
     {
         return self::$events;
-    }
-
-    /**
-     * Execute a DocuSign cURL Request.
-     */
-    public function execute(
-            $method = 'GET',
-            $url,
-            array $headers = array(),
-            array $params = array(),
-            $data = null
-        )
-    {
-        $response;
-
-        $method = strtoupper($method);
-
-        $customRequests = array(
-            self::METHOD_POST,
-            self::METHOD_PUT,
-            self::METHOD_DELETE
-        );
-
-        if ( ! empty($params)) {
-            $url .= '?' . http_build_query($params, null, '&');
-        }
-
-        self::eventInitiate($method, $url, $headers, $data);
-
-        $ch = curl_init($url);
-
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-        if (in_array($method, $customRequests)) {
-            if ($method === self::METHOD_POST) {
-                curl_setopt($ch, CURLOPT_POST, true);
-            } else {
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-            }
-
-            if ( ! empty($data)) {
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            }
-        }
-
-        try {
-            $result = curl_exec($ch);
-
-            $error = curl_error($ch);
-
-            if ( ! empty($error)) {
-                self::eventUpdate($error);
-                throw new Exception\Request($error);
-            }
-
-            $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            self::eventUpdate($status_code);
-
-            $jsonResult = json_decode($result, $assoc = true);
-            $response = ( ! is_null($jsonResult) ? $jsonResult : $result);
-        } catch (Exception $e) {
-
-            self::eventUpdate($e->getMessage());
-
-            throw new Exception\Request($e);
-        }
-
-        curl_close($ch);
-
-        if (is_array($response) && isset($response['errorCode'])) {
-            $error = $response['errorCode'] . ': ' . $response['message'];
-
-            self::eventUpdate($error);
-
-            throw new Exception\Request($error);
-        }
-
-        return $response;
-    }
-
-    public function get($url, array $headers = array(), array $params = array())
-    {
-        return $this->execute(self::METHOD_GET, $url, $headers, $params);
-    }
-
-    public function post($url, array $headers = array(), array $params = array(), $data = null)
-    {
-        return $this->execute(self::METHOD_POST, $url, $headers, $params, $data);
-    }
-
-    public function put($url, array $headers = array(), array $params = array(), $data = null)
-    {
-        return $this->execute(self::METHOD_PUT, $url, $headers, $params, $data);
-    }
-
-    public function delete($url, array $headers = array(), array $params = array(), $data = null)
-    {
-        return $this->execute(self::METHOD_DELETE, $url, $headers, $params, $data);
     }
 }

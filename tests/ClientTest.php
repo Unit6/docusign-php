@@ -46,6 +46,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $config['password'] = 'foobar';
 
         $client = new DocuSign\Client($config);
+
         $client->authenticate();
 
         $this->assertTrue($client->hasError());
@@ -56,19 +57,31 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $config = $this->config;
 
         $client = new DocuSign\Client($config);
-        $client->authenticate();
+
+        $response = $client->authenticate();
 
         $this->assertFalse($client->hasError());
 
-        return $client;
+        return $response;
     }
 
     /**
      * @depends testClientAuthenticationSuccess
      */
-    public function testClientIsValid(DocuSign\Client $client)
+    public function testClientAccountIsValid($response)
     {
-        $this->assertNotNull($client->getBaseUrl());
-        $this->assertNotNull($client->getAccountId());
+        $this->assertArrayHasKey('loginAccounts', $response);
+        $this->assertNotEmpty($response['loginAccounts']);
+
+        $row = $response['loginAccounts'][0];
+
+        $this->assertArrayHasKey('name', $row);
+        $this->assertArrayHasKey('accountId', $row);
+        $this->assertArrayHasKey('baseUrl', $row);
+        $this->assertArrayHasKey('isDefault', $row);
+        $this->assertArrayHasKey('userName', $row);
+        $this->assertArrayHasKey('userId', $row);
+        $this->assertArrayHasKey('email', $row);
+        $this->assertArrayHasKey('siteDescription', $row);
     }
 }

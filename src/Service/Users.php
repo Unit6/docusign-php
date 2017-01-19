@@ -36,13 +36,23 @@ class Users extends DocuSign\Service
      *
      * This returns a list of users for the specified account.
      *
+     * GET /accounts/{accountId}/users?additional_info={true/false}
+     *
      * @param boolean $additionalInfo When true, the full list of user information
      *                                is returned for each user in the account.
      */
-    public function getUsers($additionalInfo = false)
+    public static function getUsers($additionalInfo = false)
     {
-        # GET /accounts/{accountId}/users
-        # ?additional_info={true/false}
+        $headers = self::getClientHeaders();
+
+        $options = [
+            'headers' => $headers,
+            'query' => [
+                'additionalInfo' => ($additionalInfo ? 'true' : 'false')
+            ]
+        ];
+
+        return DocuSign\Request::get('users', $options);
     }
 
     /**
